@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+}
+
+model Advisor {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  password     String
+  created_at   DateTime  @default(now())
+  updated_at   DateTime? @updatedAt
+  image        String?
+  experience   String
+  specialty_id String
+
+  investors Investor[]
+  specialty InvestmentType @relation(fields: [specialty_id], references: [id])
+
+  @@map("advisors")
+}
+
+model Investor {
+  id         String    @id @default(uuid())
+  name       String
+  email      String    @unique
+  password   String
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  image      String?
+  amount     String
+  advisor_id String
+
+  advisor           Advisor               @relation(fields: [advisor_id], references: [id])
+  investorsProducts InvestorsAtProducts[]
+
+  @@map("investors")
+}
+
+model Product {
+  id           String @id @default(uuid())
+  product_name String
+  description  String
+  profit       Float
+  type_id      String
+
+  investorsProducts InvestorsAtProducts[]
+  investment_type   InvestmentType        @relation(fields: [type_id], references: [id])
+
+  @@map("products")
+}
+
+model InvestmentType {
+  id        String @id @default(uuid())
+  type_name String
+  risk      String
+
+  products Product[]
+  advisors Advisor[]
+
+  @@map("investment_types")
+}
+
+model InvestorsAtProducts {
+  investor_id String
+  investor    Investor @relation(fields: [investor_id], references: [id])
+
+  product_id String
+  product    Product @relation(fields: [product_id], references: [id])
+
+  assigned_at DateTime @default(now())
+
+  @@id([product_id, investor_id])
+}
