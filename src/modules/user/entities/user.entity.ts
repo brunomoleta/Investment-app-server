@@ -1,5 +1,4 @@
 import { Admin } from '../../admin/entities/admin.entity';
-import { Exclude } from 'class-transformer';
 
 export class User extends Admin {
   name!: string;
