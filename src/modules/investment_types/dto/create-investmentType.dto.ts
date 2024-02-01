@@ -5,14 +5,16 @@ enum Risk {
   Low = 'low',
   Moderate = 'moderate',
   High = 'high',
+  VeryHigh = 'very_high'
 }
 
 export class CreateInvestmentTypeDto {
   @ApiProperty()
   @IsString()
-  @MinLength(8)
+  @IsNotEmpty()
+  @MinLength(4)
   @MaxLength(32)
-  name!: string;
+  type_name!: string;
 
   @ApiProperty()
   @IsNotEmpty()

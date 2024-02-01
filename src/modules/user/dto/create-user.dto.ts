@@ -11,7 +11,7 @@ export class CreateUserDto extends CreateAdminDto {
   name!: string;
 
   @ApiProperty()
-  @IsNumber()
+  @IsString()
   @Length(11, 11)
   phone_number!: string;
 

@@ -1,5 +1,6 @@
-import { IsEnum, IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { CreateUserDto } from '../../user/dto/create-user.dto';
 
 
 enum Experience {
@@ -10,10 +11,14 @@ enum Experience {
 }
 
 
-export class CreateInvestorDto {
+export class CreateAdvisorDto extends CreateUserDto{
   @ApiProperty()
   @IsNotEmpty()
   @IsEnum(Experience)
 
   experience: Experience = Experience.Beginner;
+
+
+  @IsString()
+  speciality_id: string
 }
