@@ -11,41 +11,43 @@ datasource db {
 }
 
 model Admin {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  password String
-  is_super Boolean @default(true)
+  id          String @id @default(uuid())
+  email       String @unique
+  password    String
+  access_type String
 }
 
 model Advisor {
-  id           String    @id @default(uuid())
-  name         String
-  email        String    @unique
-  password     String
-  created_at   DateTime  @default(now())
-  updated_at   DateTime? @updatedAt
-  image        String?
-  experience   String
-  specialty_id String
-  is_super     Boolean   @default(false)
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  password      String
+  phone_number  String
+  created_at    DateTime  @default(now())
+  updated_at    DateTime? @updatedAt
+  image         String?
+  experience    String
+  speciality_id String
+  access_type   String
 
-  investors Investor[]
-  specialty InvestmentType @relation(fields: [specialty_id], references: [id])
+  investors  Investor[]
+  speciality InvestmentType? @relation(fields: [speciality_id], references: [id])
 
   @@map("advisors")
 }
 
 model Investor {
-  id         String    @id @default(uuid())
-  name       String
-  email      String    @unique
-  password   String
-  created_at DateTime  @default(now())
-  updated_at DateTime? @updatedAt
-  image      String?
-  amount     String
-  advisor_id String
-  is_super   Boolean   @default(false)
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  password     String
+  phone_number String
+  created_at   DateTime  @default(now())
+  updated_at   DateTime? @updatedAt
+  image        String?
+  amount       String
+  advisor_id   String
+  access_type  String
 
   advisor           Advisor               @relation(fields: [advisor_id], references: [id])
   investorsProducts InvestorsAtProducts[]
@@ -68,7 +70,7 @@ model Product {
 
 model InvestmentType {
   id        String @id @default(uuid())
-  type_name String
+  type_name String @unique
   risk      String
 
   products Product[]
