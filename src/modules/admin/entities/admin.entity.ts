@@ -6,13 +6,13 @@ export class Admin {
   email!: string;
 
   @Exclude()
-  is_super: boolean;
+  access_type: string;
 
   @Exclude()
   password!: string;
 
   constructor() {
     this.id = randomUUID();
-    this.is_super = true
+    this.access_type = 'admin'
   }
 }

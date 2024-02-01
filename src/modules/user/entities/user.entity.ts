@@ -9,6 +9,5 @@ export class User extends Admin {
 
   constructor() {
     super();
-    this.is_super = false;
   }
 }
