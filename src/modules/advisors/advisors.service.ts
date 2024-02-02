@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { Advisor } from './entities/advisor.entity';
 import { PrismaService } from '../../database/prisma.service';
@@ -19,18 +19,35 @@ export class AdvisorsService {
       },
     });
     if (existingAdvisor) {
-      throw new ConflictException('This advisor email already exists');
+      throw new ConflictException('This email is already an advisor');
+    }
+
+    const existingSpeciality = await this.prisma.investmentType.findUnique({
+      where: {
+        id: createAdvisorDto.speciality_id,
+      },
+    });
+    if (!existingSpeciality) {
+      throw new NotFoundException(
+        'Please use a valid speciality. This one does not exist yet.');
+    }
+
+    if (existingAdvisor) {
+      throw new ConflictException(
+        'This advisor email already exists');
     }
 
     const newAdvisor = new Advisor();
     Object.assign(newAdvisor, createAdvisorDto);
 
+    const { speciality_id, ...advisorWithoutSpecialityId } = newAdvisor;
+
     await this.prisma.advisor.create({
       data: {
-        ...newAdvisor,
+        ...advisorWithoutSpecialityId,
         speciality: {
           connect: {
-            id: createAdvisorDto.speciality_id,
+            id: speciality_id,
           },
         },
       },
@@ -39,8 +56,50 @@ export class AdvisorsService {
     return plainToInstance(Advisor, newAdvisor);
   }
 
-  findAll() {
-    const advisors = this.prisma.advisor.findMany();
+  findAllAdminOnly() {
+    const advisors = this.prisma.advisor.findMany(
+      {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone_number: true,
+          speciality: true,
+          created_at: true,
+          updated_at: true,
+          experience: true,
+          image: true,
+          investors: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              amount: true,
+              image: true,
+              phone_number: true,
+              created_at: true,
+            },
+          },
+        },
+      },
+    );
+    return plainToInstance(Advisor, advisors);
+  }
+
+  findAllNoAuth() {
+    const advisors = this.prisma.advisor.findMany(
+      {
+        select: {
+          name: true,
+          email: true,
+          speciality: true,
+          created_at: true,
+          updated_at: true,
+          experience: true,
+          image: true,
+        },
+      },
+    );
     return plainToInstance(Advisor, advisors);
   }
 
@@ -53,7 +112,7 @@ export class AdvisorsService {
       'This advisor\'s email was not found',
     );
 
-    return plainToInstance(Advisor, advisor);
+    return advisor;
   }
 
   async findById(id: string) {

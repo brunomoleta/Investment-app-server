@@ -37,7 +37,7 @@ export class AdminsService {
   }
 
   async findByEmail(email: string) {
-    const admin = await this.prisma.admin.findUnique({
+    const admin = await this.prisma.admin.findFirst({
       where: { email },
     });
 
@@ -45,7 +45,7 @@ export class AdminsService {
       "This admin's email was not found",
     );
 
-    return plainToInstance(Admin, admin);
+    return admin;
   }
 
 
