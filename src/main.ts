@@ -30,7 +30,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle("Mo'money less problems app Back-end")
     .setDescription(
-      'Back-end nest.js app that connects investors with investment advisors,
+      'Back-end nest.js app that connects investors with investment advisors'
     )
     .setVersion('1.0.0')
     .addTag('login')
