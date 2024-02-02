@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Param, Delete, HttpCode, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { AdvisorsService } from './advisors.service';
 import { CreateAdvisorDto } from './dto/create-advisor.dto';
-// import { UpdateAdvisorDto } from './dto/update-advisor.dto';
 import { JwtGuard } from '../session/jwt.guard';
 import { UpdateAdvisorDto } from './dto/update-advisor.dto';
+import { RolesGuard } from '../../decorators/roles.guard';
+import { Roles, UserRole } from '../../decorators/roles.decorator';
 
 
 @Controller('advisor')
@@ -16,9 +17,16 @@ export class AdvisorsController {
     return this.advisorsService.create(createAdvisorDto);
   }
 
+  @Get('all')
+  @Roles(UserRole.Admin)
+  @UseGuards(JwtGuard, RolesGuard)
+  findAllAdminOnly() {
+    return this.advisorsService.findAllAdminOnly();
+  }
+
   @Get()
-  findAll() {
-    return this.advisorsService.findAll();
+  findAllNoAuth() {
+    return this.advisorsService.findAllNoAuth();
   }
 
   @UseGuards(JwtGuard)
@@ -45,6 +53,4 @@ export class AdvisorsController {
   remove(@Param('id') id: string) {
     return this.advisorsService.remove(id);
   }
-
-
 }
