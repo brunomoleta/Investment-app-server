@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { CreateUserDto } from '../../user/dto/create-user.dto';
 
@@ -10,12 +10,13 @@ enum InvestmentAmount {
   Wealthy = 'wealthy'
 }
 
-export class CreateInvestorDto extends CreateUserDto{
+export class CreateInvestorDto extends CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsEnum(InvestmentAmount)
-
   amount: InvestmentAmount = InvestmentAmount.Starter;
 
-  advisor_id!: string
+  @IsNotEmpty()
+  @IsString()
+  advisor_id!: string;
 }

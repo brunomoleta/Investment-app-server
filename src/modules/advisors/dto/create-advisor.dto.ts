@@ -11,14 +11,13 @@ enum Experience {
 }
 
 
-export class CreateAdvisorDto extends CreateUserDto{
+export class CreateAdvisorDto extends CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsEnum(Experience)
 
   experience: Experience = Experience.Beginner;
 
-
   @IsString()
-  speciality_id: string
+  speciality_id: string;
 }
