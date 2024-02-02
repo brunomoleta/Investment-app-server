@@ -2,7 +2,7 @@ import { User } from '../../user/entities/user.entity';
 
 export class Investor extends User {
   amount!: string;
-  advisor!: string;
+  advisor_id!: string;
 
   constructor() {
     super();

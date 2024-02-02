@@ -19,18 +19,29 @@ export class InvestorsService {
         },
       });
     if (existingInvestor) {
-      throw new ConflictException('This email already exists');
+      throw new ConflictException('This email is already an investor');
     }
 
+    const existingAdvisor = await this.prisma.advisor.findFirst({
+      where: {
+        id: createInvestorDto.advisor_id,
+      },
+    });
+    if (!existingAdvisor) {
+      throw new NotFoundException(
+        'Please use a valid advisor. This one does not exist yet.');
+    }
     const newInvestor = new Investor();
     Object.assign(newInvestor, createInvestorDto);
 
+    const { advisor_id, ...investorWithoutAdvisorId } = newInvestor;
+
     await this.prisma.investor.create({
       data: {
-        ...newInvestor,
+        ...investorWithoutAdvisorId,
         advisor: {
           connect: {
-            id: createInvestorDto.advisor_id,
+            id: advisor_id,
           },
         },
       },
@@ -53,7 +64,7 @@ export class InvestorsService {
       'This advisor\'s email was not found',
     );
 
-    return plainToInstance(Investor, advisor);
+    return advisor;
   }
 
   async findById(id: string) {
