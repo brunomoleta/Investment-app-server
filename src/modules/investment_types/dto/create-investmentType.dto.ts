@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
-enum Risk {
+export enum Risk {
   Low = 'low',
   Moderate = 'moderate',
   High = 'high',
