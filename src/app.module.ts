@@ -15,12 +15,12 @@ import { RolesGuard } from './decorators/roles.guard';
     SessionModule,
     InvestmentTypeModule,
   ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-  ],
+  // providers: [
+  //   {
+  //     provide: APP_GUARD,
+  //     useClass: RolesGuard,
+  //   },
+  // ],
 })
 export class AppModule {
 }
