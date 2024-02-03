@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { AdvisorsService } from './advisors.service';
-import { CreateAdvisorDto } from './dto/create-advisor.dto';
+import { CreateAdvisorDto, Experience } from './dto/create-advisor.dto';
 import { JwtGuard } from '../session/jwt.guard';
 import { UpdateAdvisorDto } from './dto/update-advisor.dto';
 import { RolesGuard } from '../../decorators/roles.guard';
@@ -29,26 +29,40 @@ export class AdvisorsController {
     return this.advisorsService.findAllNoAuth();
   }
 
-  @UseGuards(JwtGuard)
+  @Get(':speciality_id')
+  filterPerSpecialityId(@Param('speciality_id') speciality_id: string) {
+    return this.advisorsService.filterPerSpecialityId(speciality_id);
+  }
+
+  @Get(':experience')
+  filterPerExperience(@Param('experience') experience: Experience) {
+    return this.advisorsService.filterPerExperience(experience);
+  }
+
   @Get(':email')
+  @UseGuards(JwtGuard)
   findByEmail(@Param('email') email: string) {
     return this.advisorsService.findByEmail(email);
   }
 
-  @UseGuards(JwtGuard)
   @Get(':id')
+  @UseGuards(JwtGuard)
   findById(@Param('id') id: string) {
     return this.advisorsService.findById(id);
   }
 
-  @UseGuards(JwtGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAdvisorDto: UpdateAdvisorDto) {
+  @Roles(UserRole.Admin, UserRole.Advisor)
+  @UseGuards(JwtGuard, RolesGuard)
+  update(@Param('id') id: string,
+         @Body() updateAdvisorDto: UpdateAdvisorDto,
+  ) {
     return this.advisorsService.update(id, updateAdvisorDto);
   }
 
-  @UseGuards(JwtGuard)
   @HttpCode(204)
+  @Roles(UserRole.Admin)
+  @UseGuards(JwtGuard, RolesGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.advisorsService.remove(id);

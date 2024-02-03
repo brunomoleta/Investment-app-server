@@ -1,15 +1,19 @@
-import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { Advisor } from './entities/advisor.entity';
 import { PrismaService } from '../../database/prisma.service';
 import { plainToInstance } from 'class-transformer';
-import { CreateAdvisorDto } from './dto/create-advisor.dto';
+import { CreateAdvisorDto, Experience } from './dto/create-advisor.dto';
 import { UpdateAdvisorDto } from './dto/update-advisor.dto';
-
 
 @Injectable()
 export class AdvisorsService {
-  constructor(private readonly prisma: PrismaService) {
+  constructor(private readonly prisma: PrismaService,
+  ) {
   }
 
   async create(createAdvisorDto: CreateAdvisorDto) {
@@ -56,8 +60,8 @@ export class AdvisorsService {
     return plainToInstance(Advisor, newAdvisor);
   }
 
-  findAllAdminOnly() {
-    const advisors = this.prisma.advisor.findMany(
+  async findAllAdminOnly() {
+    const advisors = await this.prisma.advisor.findMany(
       {
         select: {
           id: true,
@@ -86,13 +90,16 @@ export class AdvisorsService {
     return plainToInstance(Advisor, advisors);
   }
 
-  findAllNoAuth() {
-    const advisors = this.prisma.advisor.findMany(
+  async findAllNoAuth() {
+    const advisors = await this.prisma.advisor.findMany(
       {
         select: {
           name: true,
-          email: true,
-          speciality: true,
+          speciality: {
+            select: {
+              type_name: true,
+            },
+          },
           created_at: true,
           updated_at: true,
           experience: true,
@@ -103,6 +110,40 @@ export class AdvisorsService {
     return plainToInstance(Advisor, advisors);
   }
 
+  async filterPerSpecialityId(speciality_id: string) {
+    const filteredAdvisors = await this.prisma.advisor.findMany({
+      where: { speciality_id },
+      select: {
+        id: true,
+        name: true,
+        created_at: true,
+        updated_at: true,
+        experience: true,
+        image: true,
+      },
+    });
+
+    return plainToInstance(Advisor, filteredAdvisors);
+  }
+  async filterPerExperience(experience: Experience) {
+    const filteredAdvisors = await this.prisma.advisor.findMany({
+      where: { experience },
+      select: {
+        id: true,
+        name: true,
+        speciality: {
+          select: {
+            type_name: true,
+          },
+        },
+        created_at: true,
+        updated_at: true,
+        image: true,
+      },
+    });
+
+    return plainToInstance(Advisor, filteredAdvisors);
+  }
   async findByEmail(email: string) {
     const advisor = await this.prisma.advisor.findUnique({
       where: { email },
@@ -127,11 +168,36 @@ export class AdvisorsService {
     return plainToInstance(Advisor, advisor);
   }
 
-  async update(id: string, updateAdvisorDto: UpdateAdvisorDto) {
+  async update(
+    id: string,
+    updateAdvisorDto: UpdateAdvisorDto,
+  ) {
+
+    const findAdvisor = await this.prisma.advisor.findUnique({
+      where: { id },
+    });
+
+    if (!findAdvisor) {
+      throw new NotFoundException('This advisor does not exists.');
+    }
+
+    if (updateAdvisorDto.email) {
+      const emailExists = await this.prisma.advisor.findFirst({
+        where: { email: updateAdvisorDto.email },
+      });
+
+      if (emailExists && emailExists.id !== id) {
+        throw new ConflictException(
+          'This email belongs to another user. Please try another one.',
+        );
+      }
+    }
+
     const updatedAdvisor = await this.prisma.advisor.update({
       where: { id },
       data: updateAdvisorDto,
     });
+    console.log(updatedAdvisor);
 
     return plainToInstance(Advisor, updatedAdvisor);
   }

@@ -27,13 +27,10 @@ export class AdminsController {
     return this.adminsService.findByEmail(email);
   }
 
-
   @UseGuards(JwtGuard)
   @HttpCode(204)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.adminsService.remove(id);
   }
-
-
 }
