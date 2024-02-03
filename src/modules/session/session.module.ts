@@ -28,11 +28,7 @@ import { InvestorsService } from '../investors/investors.service';
     InvestorsService,
     PrismaService,
     JwtStrategy,
-    JwtService
   ],
-  exports: [
-    JwtService
-  ]
 })
 
 export class SessionModule {
