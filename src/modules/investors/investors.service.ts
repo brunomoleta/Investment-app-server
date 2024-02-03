@@ -50,11 +50,43 @@ export class InvestorsService {
     return plainToInstance(Investor, newInvestor);
   }
 
+
   findAll() {
     const investors = this.prisma.investor.findMany();
     return plainToInstance(Investor, investors);
   }
 
+  async filterPerAdvisorId(advisor_id: string) {
+    const investors = await this.prisma.investor.findMany({
+      where: { advisor_id },
+      select: {
+        id: true,
+        name: true,
+        image: true,
+        amount: true,
+        email: true,
+        created_at: true,
+      },
+    });
+
+    return plainToInstance(Investor, investors);
+  }
+
+  async filterPerAmount(amount: string) {
+    const investors = await this.prisma.investor.findMany({
+      where: { amount },
+      select: {
+        id: true,
+        name: true,
+        image: true,
+        amount: true,
+        email: true,
+        created_at: true,
+      },
+    });
+
+    return plainToInstance(Investor, investors);
+  }
   async findByEmail(email: string) {
     const advisor = await this.prisma.investor.findUnique({
       where: { email },

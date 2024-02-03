@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Param, Delete, HttpCode, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { InvestorsService } from './investors.service';
-import { CreateInvestorDto } from './dto/create-investor.dto';
+import { CreateInvestorDto, InvestmentAmount } from './dto/create-investor.dto';
 import { UpdateAdvisorDto } from '../advisors/dto/update-advisor.dto';
 import { JwtGuard } from '../session/jwt.guard';
+import { RolesGuard } from '../../decorators/roles.guard';
+import { Roles, UserRole } from '../../decorators/roles.decorator';
 
 @Controller('investor')
 export class InvestorsController {
@@ -14,10 +16,24 @@ export class InvestorsController {
     return this.investorsService.create(createInvestorDto);
   }
 
-  @UseGuards(JwtGuard)
   @Get()
+  @Roles(UserRole.Admin)
+  @UseGuards(JwtGuard, RolesGuard)
   findAll() {
     return this.investorsService.findAll();
+  }
+
+
+  @Get("advisor_id")
+  @Roles(UserRole.Admin, UserRole.Advisor)
+  filterPerAdvisorId(@Param('advisor_id') advisor_id: string){
+    return this.investorsService.filterPerAdvisorId(advisor_id)
+  }
+
+  @Get("amount")
+  @Roles(UserRole.Admin)
+  filterPerAmount(@Param('advisor_id') amount: InvestmentAmount){
+    return this.investorsService.filterPerAmount(amount)
   }
 
   @UseGuards(JwtGuard)
@@ -32,15 +48,17 @@ export class InvestorsController {
     return this.investorsService.findById(id);
   }
 
-  @UseGuards(JwtGuard)
   @Patch(':id')
+  @Roles(UserRole.Admin, UserRole.Investor)
+  @UseGuards(JwtGuard, RolesGuard)
   update(@Param('id') id: string, @Body() updateAdvisorDto: UpdateAdvisorDto) {
     return this.investorsService.update(id, updateAdvisorDto);
   }
 
-  @UseGuards(JwtGuard)
   @HttpCode(204)
   @Delete(':id')
+  @Roles(UserRole.Admin, UserRole.Investor)
+  @UseGuards(JwtGuard, RolesGuard)
   remove(@Param('id') id: string) {
     return this.investorsService.remove(id);
   }
