@@ -7,7 +7,12 @@ import { StartSessionDto } from './dto/start-session.dto';
 import { compare } from 'bcryptjs';
 import { InvestorsService } from '../investors/investors.service';
 import { AdvisorsService } from '../advisors/advisors.service';
+import { UserRole } from '../../decorators/roles.decorator';
 
+export interface ISession {
+  id: string;
+  access_type: UserRole;
+}
 
 @Injectable()
 export class SessionService {
@@ -20,18 +25,19 @@ export class SessionService {
   ) {
   }
 
-  async login({ email, password, userType }: StartSessionDto & { userType: 'admin' | 'investor' | 'advisor' }) {
+  async login({ email, password, userType }: StartSessionDto & {
+    userType: UserRole.Admin | UserRole.Advisor | UserRole.Investor
+  }) {
     let user;
 
     switch (userType) {
-      case 'admin':
+      case UserRole.Admin:
         user = await this.adminService.findByEmail(email);
         break;
-      case 'investor':
-        // you will need to create and inject InvestorsService
+      case UserRole.Investor:
         user = await this.investorsService.findByEmail(email);
         break;
-      case 'advisor':
+      case UserRole.Advisor:
         user = await this.advisorsService.findByEmail(email);
         break;
       default:
@@ -47,12 +53,10 @@ export class SessionService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    const token = this.jwtService.sign({
-      id: user.id,
-      access_type: user.access_type,
-    });
+    console.log('USERRRRRRRRRRRRRRRRRRRRR', user);
+    const token = this.jwtService.sign({});
+    console.log(token);
 
-
-    return { token: token, access_type: user.access_type };
+    return { token: token };
   }
 }

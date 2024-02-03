@@ -2,8 +2,7 @@ import { Controller, Get, Post, Body, Param, Delete, HttpCode, Patch } from '@ne
 import { ApiTags } from '@nestjs/swagger';
 import { SessionService } from './session.service';
 import { StartSessionDto } from './dto/start-session.dto';
-import { AdvisorsService } from '../advisors/advisors.service';
-import { InvestorsService } from '../investors/investors.service';
+import { UserRole } from '../../decorators/roles.decorator';
 
 @ApiTags('login')
 @Controller('session')
@@ -13,17 +12,17 @@ export class SessionController {
 
   @Post('/admin')
   async loginAdmin(@Body() admin: StartSessionDto) {
-    return this.sessionService.login({ ...admin, userType: 'admin' });
+    return this.sessionService.login({ ...admin, userType: UserRole.Admin });
   }
 
   @Post('/advisor')
   async loginAdvisor(@Body() advisor: StartSessionDto) {
-    return this.sessionService.login({ ...advisor, userType: 'advisor' });
+    return this.sessionService.login({ ...advisor, userType: UserRole.Advisor });
   }
 
   @Post('/investor')
   async loginInvestor(@Body() investor: StartSessionDto) {
-    return this.sessionService.login({ ...investor, userType: 'investor' });
+    return this.sessionService.login({ ...investor, userType: UserRole.Investor });
   }
 
 }
