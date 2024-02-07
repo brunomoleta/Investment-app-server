@@ -5,6 +5,8 @@ export class Admin {
   readonly id: string;
   email!: string;
 
+  name!: string;
+
   @Exclude()
   access_type: string;
 
@@ -13,6 +15,6 @@ export class Admin {
 
   constructor() {
     this.id = randomUUID();
-    this.access_type = 'admin'
+    this.access_type = 'admin';
   }
 }

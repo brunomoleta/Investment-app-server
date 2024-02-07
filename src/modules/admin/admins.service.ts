@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateAdminDto } from './dto/create-admin.dto';
 
 import { Admin } from './entities/admin.entity';
@@ -7,8 +11,7 @@ import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class AdminsService {
-  constructor(private readonly prisma: PrismaService) {
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createAdminDto: CreateAdminDto) {
     const existingAdmin = await this.prisma.admin.findUnique({
@@ -30,7 +33,6 @@ export class AdminsService {
     return plainToInstance(Admin, newAdmin);
   }
 
-
   findAll() {
     const admins = this.prisma.admin.findMany();
     return plainToInstance(Admin, admins);
@@ -41,25 +43,20 @@ export class AdminsService {
       where: { email },
     });
 
-    if (!admin) throw new NotFoundException(
-      "This admin's email was not found",
-    );
+    if (!admin) throw new NotFoundException("This admin's email was not found");
 
     return admin;
   }
-
 
   async remove(id: string) {
     const removeAdmin = await this.prisma.admin.findUnique({
       where: { id },
     });
 
-    if (!removeAdmin) throw new NotFoundException(
-      'This admin was not found'
-    );
+    if (!removeAdmin) throw new NotFoundException('This admin was not found');
 
-    await this.prisma.admin.delete(({
+    await this.prisma.admin.delete({
       where: { id },
-    }));
+    });
   }
 }

@@ -13,6 +13,7 @@ datasource db {
 model Admin {
   id          String @id @default(uuid())
   email       String @unique
+  name        String
   password    String
   access_type String
 }
