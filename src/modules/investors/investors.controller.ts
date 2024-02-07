@@ -7,14 +7,14 @@ import {
   Param,
   Patch,
   Post,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { InvestorsService } from './investors.service';
 import { CreateInvestorDto, InvestmentAmount } from './dto/create-investor.dto';
 import { UpdateAdvisorDto } from '../advisors/dto/update-advisor.dto';
 import { JwtGuard } from '../session/jwt.guard';
-import { RolesGuard } from '../../decorators/roles.guard';
-import { Roles, UserRole } from '../../decorators/roles.decorator';
+import { decode } from 'jsonwebtoken';
 
 @Controller('investor')
 export class InvestorsController {
@@ -26,48 +26,46 @@ export class InvestorsController {
   }
 
   @Get()
-  @Roles(UserRole.Admin)
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard)
   findAll() {
     return this.investorsService.findAll();
   }
 
   @Get('advisor/:advisor_id')
-  @Roles(UserRole.Admin, UserRole.Advisor)
   filterPerAdvisorId(@Param('advisor_id') advisor_id: string) {
     return this.investorsService.filterPerAdvisorId(advisor_id);
   }
 
-  @Get('amount/amount')
-  @Roles(UserRole.Admin)
+  @Get('amount/:amount')
   filterPerAmount(@Param('advisor_id') amount: InvestmentAmount) {
     return this.investorsService.filterPerAmount(amount);
   }
 
+  @Get('id')
   @UseGuards(JwtGuard)
-  @Get(':email')
-  findByEmail(@Param('email') email: string) {
-    return this.investorsService.findByEmail(email);
+  findById(@Request() request: any) {
+    const token = request.headers.authorization.split(' ')[1];
+    const decoded: any = decode(token);
+
+    return this.investorsService.findById(decoded.sub);
   }
 
+  @Patch()
   @UseGuards(JwtGuard)
-  @Get('id/:id')
-  findById(@Param('id') id: string) {
-    return this.investorsService.findById(id);
-  }
+  update(@Request() request: any, @Body() updateAdvisorDto: UpdateAdvisorDto) {
+    const token = request.headers.authorization.split(' ')[1];
+    const decoded: any = decode(token);
 
-  @Patch(':id')
-  @Roles(UserRole.Admin, UserRole.Investor)
-  @UseGuards(JwtGuard, RolesGuard)
-  update(@Param('id') id: string, @Body() updateAdvisorDto: UpdateAdvisorDto) {
-    return this.investorsService.update(id, updateAdvisorDto);
+    return this.investorsService.update(decoded.sub, updateAdvisorDto);
   }
 
   @HttpCode(204)
-  @Delete(':id')
-  @Roles(UserRole.Admin, UserRole.Investor)
-  @UseGuards(JwtGuard, RolesGuard)
-  remove(@Param('id') id: string) {
-    return this.investorsService.remove(id);
+  @Delete()
+  @UseGuards(JwtGuard)
+  remove(@Request() request: any) {
+    const token = request.headers.authorization.split(' ')[1];
+    const decoded: any = decode(token);
+
+    return this.investorsService.remove(decoded.sub);
   }
 }

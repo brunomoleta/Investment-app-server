@@ -89,6 +89,7 @@ export class InvestorsService {
 
     return plainToInstance(Investor, investors);
   }
+
   async findByEmail(email: string) {
     const investor = await this.prisma.investor.findUnique({
       where: { email },
