@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { PrismaService } from '../../database/prisma.service';
 import { plainToInstance } from 'class-transformer';
@@ -8,16 +12,14 @@ import { UpdateInvestorDto } from './dto/update-investor.dto';
 
 @Injectable()
 export class InvestorsService {
-  constructor(private readonly prisma: PrismaService) {
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createInvestorDto: CreateInvestorDto) {
-    const existingInvestor = await this.prisma.investor
-      .findUnique({
-        where: {
-          email: createInvestorDto.email,
-        },
-      });
+    const existingInvestor = await this.prisma.investor.findUnique({
+      where: {
+        email: createInvestorDto.email,
+      },
+    });
     if (existingInvestor) {
       throw new ConflictException('This email is already an investor');
     }
@@ -29,7 +31,8 @@ export class InvestorsService {
     });
     if (!existingAdvisor) {
       throw new NotFoundException(
-        'Please use a valid advisor. This one does not exist yet.');
+        'Please use a valid advisor. This one does not exist yet.',
+      );
     }
     const newInvestor = new Investor();
     Object.assign(newInvestor, createInvestorDto);
@@ -49,7 +52,6 @@ export class InvestorsService {
 
     return plainToInstance(Investor, newInvestor);
   }
-
 
   findAll() {
     const investors = this.prisma.investor.findMany();
@@ -88,27 +90,24 @@ export class InvestorsService {
     return plainToInstance(Investor, investors);
   }
   async findByEmail(email: string) {
-    const advisor = await this.prisma.investor.findUnique({
+    const investor = await this.prisma.investor.findUnique({
       where: { email },
     });
 
-    if (!advisor) throw new NotFoundException(
-      'This advisor\'s email was not found',
-    );
+    if (!investor)
+      throw new NotFoundException("This investors's email was not found");
 
-    return advisor;
+    return investor;
   }
 
   async findById(id: string) {
-    const advisor = await this.prisma.investor.findUnique({
+    const investor = await this.prisma.investor.findUnique({
       where: { id },
     });
 
-    if (!advisor) throw new NotFoundException(
-      'This advisor was not found',
-    );
+    if (!investor) throw new NotFoundException('This investor was not found');
 
-    return plainToInstance(Investor, advisor);
+    return plainToInstance(Investor, investor);
   }
 
   async update(id: string, updateInvestorDto: UpdateInvestorDto) {
@@ -125,12 +124,11 @@ export class InvestorsService {
       where: { id },
     });
 
-    if (!removeInvestor) throw new NotFoundException(
-      'This investor was not found',
-    );
+    if (!removeInvestor)
+      throw new NotFoundException('This investor was not found');
 
-    await this.prisma.investor.delete(({
+    await this.prisma.investor.delete({
       where: { id },
-    }));
+    });
   }
 }

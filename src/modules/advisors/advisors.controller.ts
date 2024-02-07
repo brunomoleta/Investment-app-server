@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AdvisorsService } from './advisors.service';
 import { CreateAdvisorDto, Experience } from './dto/create-advisor.dto';
 import { JwtGuard } from '../session/jwt.guard';
@@ -6,11 +16,9 @@ import { UpdateAdvisorDto } from './dto/update-advisor.dto';
 import { RolesGuard } from '../../decorators/roles.guard';
 import { Roles, UserRole } from '../../decorators/roles.decorator';
 
-
 @Controller('advisor')
 export class AdvisorsController {
-  constructor(private readonly advisorsService: AdvisorsService) {
-  }
+  constructor(private readonly advisorsService: AdvisorsService) {}
 
   @Post()
   create(@Body() createAdvisorDto: CreateAdvisorDto) {
@@ -46,7 +54,8 @@ export class AdvisorsController {
   }
 
   @Get(':id')
-  @UseGuards(JwtGuard)
+  @Roles(UserRole.Advisor, UserRole.Admin)
+  @UseGuards(JwtGuard, RolesGuard)
   findById(@Param('id') id: string) {
     return this.advisorsService.findById(id);
   }
@@ -54,9 +63,7 @@ export class AdvisorsController {
   @Patch(':id')
   @Roles(UserRole.Admin, UserRole.Advisor)
   @UseGuards(JwtGuard, RolesGuard)
-  update(@Param('id') id: string,
-         @Body() updateAdvisorDto: UpdateAdvisorDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateAdvisorDto: UpdateAdvisorDto) {
     return this.advisorsService.update(id, updateAdvisorDto);
   }
 

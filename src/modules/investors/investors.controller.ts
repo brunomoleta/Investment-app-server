@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { InvestorsService } from './investors.service';
 import { CreateInvestorDto, InvestmentAmount } from './dto/create-investor.dto';
 import { UpdateAdvisorDto } from '../advisors/dto/update-advisor.dto';
@@ -8,8 +18,7 @@ import { Roles, UserRole } from '../../decorators/roles.decorator';
 
 @Controller('investor')
 export class InvestorsController {
-  constructor(private readonly investorsService: InvestorsService) {
-  }
+  constructor(private readonly investorsService: InvestorsService) {}
 
   @Post()
   create(@Body() createInvestorDto: CreateInvestorDto) {
@@ -23,17 +32,16 @@ export class InvestorsController {
     return this.investorsService.findAll();
   }
 
-
-  @Get("advisor_id")
+  @Get('advisor/:advisor_id')
   @Roles(UserRole.Admin, UserRole.Advisor)
-  filterPerAdvisorId(@Param('advisor_id') advisor_id: string){
-    return this.investorsService.filterPerAdvisorId(advisor_id)
+  filterPerAdvisorId(@Param('advisor_id') advisor_id: string) {
+    return this.investorsService.filterPerAdvisorId(advisor_id);
   }
 
-  @Get("amount")
+  @Get('amount/amount')
   @Roles(UserRole.Admin)
-  filterPerAmount(@Param('advisor_id') amount: InvestmentAmount){
-    return this.investorsService.filterPerAmount(amount)
+  filterPerAmount(@Param('advisor_id') amount: InvestmentAmount) {
+    return this.investorsService.filterPerAmount(amount);
   }
 
   @UseGuards(JwtGuard)
@@ -43,7 +51,7 @@ export class InvestorsController {
   }
 
   @UseGuards(JwtGuard)
-  @Get(':id')
+  @Get('id/:id')
   findById(@Param('id') id: string) {
     return this.investorsService.findById(id);
   }
