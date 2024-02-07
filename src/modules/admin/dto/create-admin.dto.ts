@@ -4,12 +4,21 @@ import {
   IsEmail,
   IsNotEmpty,
   MinLength,
-  MaxLength, IsString, Matches,
+  MaxLength,
+  IsString,
+  Matches,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { hashSync } from 'bcryptjs';
 
 export class CreateAdminDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(4)
+  @MaxLength(64)
+  name!: string;
+
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -32,12 +41,10 @@ export class CreateAdminDto {
     message: 'Password does not contain one number. or more',
   })
   @Matches(/^(?=.*[!@#$%^&*()_+])/, {
-      message: 'Password does not contain one special character or more.',
-    },
-  )
+    message: 'Password does not contain one special character or more.',
+  })
   @Transform(({ value }: { value: string }) => hashSync(value), {
     groups: ['transform'],
   })
   password!: string;
 }
-
