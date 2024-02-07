@@ -34,7 +34,7 @@ export class SessionService {
     userType,
   }: StartSessionDto & {
     userType: UserRole.Admin | UserRole.Advisor | UserRole.Investor;
-  }) {
+  }): Promise<{ token: string }> {
     let user;
 
     switch (userType) {
@@ -60,8 +60,9 @@ export class SessionService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    const token = this.jwtService.sign({});
+    const { id } = user;
+    const token = { sub: id };
 
-    return { token: token, id: user.id };
+    return { token: await this.jwtService.signAsync(token) };
   }
 }

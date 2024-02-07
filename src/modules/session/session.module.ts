@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { Passport } from 'passport';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import * as process from 'process';
 import { JwtStrategy } from './jwt.strategy';
 import { SessionController } from './session.controller';
@@ -13,12 +13,10 @@ import { InvestorsService } from '../investors/investors.service';
 @Module({
   imports: [
     Passport,
-    JwtModule.register(
-      {
-        secret: process.env.JWT_SECRET_KEY,
-        signOptions: { expiresIn: '200d' },
-      },
-    ),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET_KEY,
+      signOptions: { expiresIn: '200d' },
+    }),
   ],
   controllers: [SessionController],
   providers: [
@@ -30,7 +28,4 @@ import { InvestorsService } from '../investors/investors.service';
     JwtStrategy,
   ],
 })
-
-export class SessionModule {
-
-}
+export class SessionModule {}
