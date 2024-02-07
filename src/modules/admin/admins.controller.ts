@@ -1,36 +1,50 @@
-import { Controller, Get, Post, Body, Param, Delete, HttpCode, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { AdminsService } from './admins.service';
-
 
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { JwtGuard } from '../session/jwt.guard';
+import { decode } from 'jsonwebtoken';
 
 @Controller('admin')
 export class AdminsController {
-  constructor(private readonly adminsService: AdminsService) {
-  }
+  constructor(private readonly adminsService: AdminsService) {}
 
   @Post()
   create(@Body() createAdminDto: CreateAdminDto) {
     return this.adminsService.create(createAdminDto);
   }
 
-  @UseGuards(JwtGuard)
   @Get()
+  @UseGuards(JwtGuard)
   findAll() {
     return this.adminsService.findAll();
   }
 
+  @Get('id')
   @UseGuards(JwtGuard)
-  @Get(':email')
-  findByEmail(@Param('email') email: string) {
-    return this.adminsService.findByEmail(email);
+  findById(@Request() request: any) {
+    const token = request.headers.authorization.split(' ')[1];
+    const decoded: any = decode(token);
+
+    return this.adminsService.findById(decoded.sub);
   }
 
-  @UseGuards(JwtGuard)
   @HttpCode(204)
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.adminsService.remove(id);
+  @Delete()
+  @UseGuards(JwtGuard)
+  remove(@Request() request: any) {
+    const token = request.headers.authorization.split(' ')[1];
+    const decoded: any = decode(token);
+
+    return this.adminsService.remove(decoded.sub);
   }
 }

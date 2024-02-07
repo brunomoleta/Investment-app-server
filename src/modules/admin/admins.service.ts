@@ -14,7 +14,7 @@ export class AdminsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createAdminDto: CreateAdminDto) {
-    const existingAdmin = await this.prisma.admin.findUnique({
+    const existingAdmin: Admin = await this.prisma.admin.findUnique({
       where: {
         email: createAdminDto.email,
       },
@@ -48,7 +48,17 @@ export class AdminsService {
     return admin;
   }
 
-  async remove(id: string) {
+  async findById(id: string): Promise<Admin> {
+    const admin = await this.prisma.admin.findUnique({
+      where: { id },
+    });
+
+    if (!admin) throw new NotFoundException('This admin was not found');
+
+    return plainToInstance(Admin, admin);
+  }
+
+  async remove(id: string): Promise<void> {
     const removeAdmin = await this.prisma.admin.findUnique({
       where: { id },
     });
