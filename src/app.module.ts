@@ -4,8 +4,6 @@ import { InvestorsModule } from './modules/investors/investors.module';
 import { AdvisorsModule } from './modules/advisors/advisors.module';
 import { SessionModule } from './modules/session/session.module';
 import { InvestmentTypeModule } from './modules/investment_types/investmentType.module';
-import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './decorators/roles.guard';
 
 @Module({
   imports: [
@@ -15,12 +13,5 @@ import { RolesGuard } from './decorators/roles.guard';
     SessionModule,
     InvestmentTypeModule,
   ],
-  // providers: [
-  //   {
-  //     provide: APP_GUARD,
-  //     useClass: RolesGuard,
-  //   },
-  // ],
 })
-export class AppModule {
-}
+export class AppModule {}
