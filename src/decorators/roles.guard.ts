@@ -5,15 +5,16 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector,
-              private jwtService: JwtService,
-  ) {
-  }
-
+  constructor(
+    private reflector: Reflector,
+    private jwtService: JwtService,
+  ) {}
 
   canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(
-      'roles', [context.getHandler(), context.getClass()]);
+      'roles',
+      [context.getHandler(), context.getClass()],
+    );
 
     if (!requiredRoles) {
       return true;
@@ -31,9 +32,8 @@ export class RolesGuard implements CanActivate {
     return this.validateRoles(requiredRoles, userRoles);
   }
 
-
   validateRoles(roles: string[], userRoles: string[]) {
     console.log('VALIDATE ROLES', roles);
-    return roles.some(role => userRoles.includes(role));
+    return roles.some((role) => userRoles.includes(role));
   }
 }
