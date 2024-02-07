@@ -12,8 +12,6 @@ import {
 import { JwtGuard } from '../session/jwt.guard';
 import { InvestmentTypeService } from './investmentType.service';
 import { CreateInvestmentTypeDto, Risk } from './dto/create-investmentType.dto';
-import { Roles, UserRole } from '../../decorators/roles.decorator';
-import { RolesGuard } from '../../decorators/roles.guard';
 import { UpdateInvestmentTypeDto } from './dto/update-investmentType.dto';
 
 @Controller('type')
@@ -21,15 +19,13 @@ export class InvestmentTypeController {
   constructor(private readonly investmentTypeService: InvestmentTypeService) {}
 
   @Post()
-  @Roles(UserRole.Admin)
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard)
   create(@Body() createInvestmentTypeDto: CreateInvestmentTypeDto) {
     return this.investmentTypeService.create(createInvestmentTypeDto);
   }
 
   @Get('all')
-  @Roles(UserRole.Admin)
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard)
   findAllAdminOnly() {
     return this.investmentTypeService.findAllAdminOnly();
   }
@@ -49,14 +45,13 @@ export class InvestmentTypeController {
     return this.investmentTypeService.findByName(type_name);
   }
 
-  @Get(':id')
+  @Get('id/:id')
   findById(@Param('id') id: string) {
     return this.investmentTypeService.findById(id);
   }
 
   @Patch(':id')
-  @Roles(UserRole.Admin)
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard)
   update(
     @Param('id') id: string,
     @Body() updateInvestmentTypeDto: UpdateInvestmentTypeDto,
@@ -65,8 +60,7 @@ export class InvestmentTypeController {
   }
 
   @HttpCode(204)
-  @Roles(UserRole.Advisor)
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.investmentTypeService.remove(id);
