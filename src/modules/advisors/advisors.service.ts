@@ -12,9 +12,7 @@ import { UpdateAdvisorDto } from './dto/update-advisor.dto';
 
 @Injectable()
 export class AdvisorsService {
-  constructor(private readonly prisma: PrismaService,
-  ) {
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createAdvisorDto: CreateAdvisorDto) {
     const existingAdvisor = await this.prisma.advisor.findUnique({
@@ -33,12 +31,12 @@ export class AdvisorsService {
     });
     if (!existingSpeciality) {
       throw new NotFoundException(
-        'Please use a valid speciality. This one does not exist yet.');
+        'Please use a valid speciality. This one does not exist yet.',
+      );
     }
 
     if (existingAdvisor) {
-      throw new ConflictException(
-        'This advisor email already exists');
+      throw new ConflictException('This advisor email already exists');
     }
 
     const newAdvisor = new Advisor();
@@ -61,52 +59,48 @@ export class AdvisorsService {
   }
 
   async findAllAdminOnly() {
-    const advisors = await this.prisma.advisor.findMany(
-      {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone_number: true,
-          speciality: true,
-          created_at: true,
-          updated_at: true,
-          experience: true,
-          image: true,
-          investors: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              amount: true,
-              image: true,
-              phone_number: true,
-              created_at: true,
-            },
+    const advisors = await this.prisma.advisor.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone_number: true,
+        speciality: true,
+        created_at: true,
+        updated_at: true,
+        experience: true,
+        image: true,
+        investors: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            amount: true,
+            image: true,
+            phone_number: true,
+            created_at: true,
           },
         },
       },
-    );
+    });
     return plainToInstance(Advisor, advisors);
   }
 
   async findAllNoAuth() {
-    const advisors = await this.prisma.advisor.findMany(
-      {
-        select: {
-          name: true,
-          speciality: {
-            select: {
-              type_name: true,
-            },
+    const advisors = await this.prisma.advisor.findMany({
+      select: {
+        name: true,
+        speciality: {
+          select: {
+            type_name: true,
           },
-          created_at: true,
-          updated_at: true,
-          experience: true,
-          image: true,
         },
+        created_at: true,
+        updated_at: true,
+        experience: true,
+        image: true,
       },
-    );
+    });
     return plainToInstance(Advisor, advisors);
   }
 
@@ -149,9 +143,8 @@ export class AdvisorsService {
       where: { email },
     });
 
-    if (!advisor) throw new NotFoundException(
-      'This advisor\'s email was not found',
-    );
+    if (!advisor)
+      throw new NotFoundException("This advisor's email was not found");
 
     return advisor;
   }
@@ -161,18 +154,12 @@ export class AdvisorsService {
       where: { id },
     });
 
-    if (!advisor) throw new NotFoundException(
-      'This advisor was not found',
-    );
+    if (!advisor) throw new NotFoundException('This advisor was not found');
 
     return plainToInstance(Advisor, advisor);
   }
 
-  async update(
-    id: string,
-    updateAdvisorDto: UpdateAdvisorDto,
-  ) {
-
+  async update(id: string, updateAdvisorDto: UpdateAdvisorDto) {
     const findAdvisor = await this.prisma.advisor.findUnique({
       where: { id },
     });
@@ -207,12 +194,11 @@ export class AdvisorsService {
       where: { id },
     });
 
-    if (!removeAdvisor) throw new NotFoundException(
-      'This advisor was not found',
-    );
+    if (!removeAdvisor)
+      throw new NotFoundException('This advisor was not found');
 
-    await this.prisma.advisor.delete(({
+    await this.prisma.advisor.delete({
       where: { id },
-    }));
+    });
   }
 }

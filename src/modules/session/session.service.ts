@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 
 import { PrismaService } from '../../database/prisma.service';
 import { AdminsService } from '../admin/admins.service';
@@ -22,11 +26,14 @@ export class SessionService {
     private investorsService: InvestorsService,
     private advisorsService: AdvisorsService,
     private jwtService: JwtService,
-  ) {
-  }
+  ) {}
 
-  async login({ email, password, userType }: StartSessionDto & {
-    userType: UserRole.Admin | UserRole.Advisor | UserRole.Investor
+  async login({
+    email,
+    password,
+    userType,
+  }: StartSessionDto & {
+    userType: UserRole.Admin | UserRole.Advisor | UserRole.Investor;
   }) {
     let user;
 
@@ -53,10 +60,8 @@ export class SessionService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    console.log('USERRRRRRRRRRRRRRRRRRRRR', user);
     const token = this.jwtService.sign({});
-    console.log(token);
 
-    return { token: token };
+    return { token: token, id: user.id };
   }
 }
