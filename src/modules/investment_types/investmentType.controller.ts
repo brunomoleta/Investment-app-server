@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtGuard } from '../session/jwt.guard';
 import { InvestmentTypeService } from './investmentType.service';
 import { CreateInvestmentTypeDto, Risk } from './dto/create-investmentType.dto';
@@ -6,15 +16,13 @@ import { Roles, UserRole } from '../../decorators/roles.decorator';
 import { RolesGuard } from '../../decorators/roles.guard';
 import { UpdateInvestmentTypeDto } from './dto/update-investmentType.dto';
 
-
 @Controller('type')
 export class InvestmentTypeController {
-  constructor(private readonly investmentTypeService: InvestmentTypeService) {
-  }
+  constructor(private readonly investmentTypeService: InvestmentTypeService) {}
 
-  @Roles(UserRole.Advisor)
-  @UseGuards(JwtGuard, RolesGuard)
   @Post()
+  @Roles(UserRole.Admin)
+  @UseGuards(JwtGuard, RolesGuard)
   create(@Body() createInvestmentTypeDto: CreateInvestmentTypeDto) {
     return this.investmentTypeService.create(createInvestmentTypeDto);
   }
@@ -47,9 +55,12 @@ export class InvestmentTypeController {
   }
 
   @Patch(':id')
-  @Roles(UserRole.Advisor)
+  @Roles(UserRole.Admin)
   @UseGuards(JwtGuard, RolesGuard)
-  update(@Param('id') id: string, @Body() updateInvestmentTypeDto: UpdateInvestmentTypeDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateInvestmentTypeDto: UpdateInvestmentTypeDto,
+  ) {
     return this.investmentTypeService.update(id, updateInvestmentTypeDto);
   }
 
@@ -60,5 +71,4 @@ export class InvestmentTypeController {
   remove(@Param('id') id: string) {
     return this.investmentTypeService.remove(id);
   }
-
 }
