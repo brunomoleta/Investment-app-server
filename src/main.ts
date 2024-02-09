@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { PaginationInterceptor } from './interceptor/pagination.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,10 +15,12 @@ async function bootstrap() {
     }),
   );
 
+  app.useGlobalInterceptors(new PaginationInterceptor());
+
   const ngrokPattern = /https:\/\/[a-zA-Z0-9-]+\.ngrok-free\.app(.*)/;
   const regexPattern: RegExp = /.durvalmusicshop.*\.vercel\.app.*/;
   const localUrl: string = 'http://localhost:3000';
-  const acceptedValuesArray = [regexPattern, localUrl, ngrokPattern];
+  const acceptedValuesArray = [localUrl, ngrokPattern];
 
   const corsOptions = {
     origin: acceptedValuesArray,
@@ -30,7 +33,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle("Mo'money less problems app Back-end")
     .setDescription(
-      'Back-end nest.js app that connects investors with investment advisors'
+      'Back-end nest.js app that connects investors with investment advisors',
     )
     .setVersion('1.0.0')
     .addTag('login')
