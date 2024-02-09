@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { CreateAdvisorDto, Experience } from './dto/create-advisor.dto';
 import { JwtGuard } from '../session/jwt.guard';
 import { UpdateAdvisorDto } from './dto/update-advisor.dto';
 import { decode } from 'jsonwebtoken';
+import { RetrieveAdvisors } from './advisors';
 
 @Controller('advisor')
 export class AdvisorsController {
@@ -27,23 +29,29 @@ export class AdvisorsController {
 
   @Get('all')
   @UseGuards(JwtGuard)
-  findAllAdminOnly() {
-    return this.advisorsService.findAllAdminOnly();
+  findAllAdminOnly(@Req() request: Request): Promise<RetrieveAdvisors> {
+    return this.advisorsService.findAllAdminOnly(request);
   }
 
   @Get()
-  findAllNoAuth() {
-    return this.advisorsService.findAllNoAuth();
+  findAllNoAuth(@Req() request: Request): Promise<RetrieveAdvisors> {
+    return this.advisorsService.findAllNoAuth(request);
   }
 
   @Get('experience/:speciality_id')
-  filterPerSpecialityId(@Param('speciality_id') speciality_id: string) {
-    return this.advisorsService.filterPerSpecialityId(speciality_id);
+  filterPerSpecialityId(
+    @Req() request: Request,
+    @Param('speciality_id') speciality_id: string,
+  ) {
+    return this.advisorsService.filterPerSpecialityId(request, speciality_id);
   }
 
   @Get('experience/:experience')
-  filterPerExperience(@Param('experience') experience: Experience) {
-    return this.advisorsService.filterPerExperience(experience);
+  filterPerExperience(
+    @Req() request: Request,
+    @Param('experience') experience: Experience,
+  ) {
+    return this.advisorsService.filterPerExperience(request, experience);
   }
 
   @Get('id')

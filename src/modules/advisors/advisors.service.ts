@@ -9,10 +9,21 @@ import { PrismaService } from '../../database/prisma.service';
 import { plainToInstance } from 'class-transformer';
 import { CreateAdvisorDto, Experience } from './dto/create-advisor.dto';
 import { UpdateAdvisorDto } from './dto/update-advisor.dto';
+import { RetrieveAdvisors } from './advisors';
 
 @Injectable()
 export class AdvisorsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  prepareResponse(advisors: any[], page: number): RetrieveAdvisors {
+    return {
+      advisors: plainToInstance(Advisor, advisors),
+      info: {
+        page: Number(page),
+        perPage: Number(advisors.length),
+      },
+    };
+  }
 
   async create(createAdvisorDto: CreateAdvisorDto) {
     const existingAdvisor = await this.prisma.advisor.findUnique({
@@ -58,7 +69,9 @@ export class AdvisorsService {
     return plainToInstance(Advisor, newAdvisor);
   }
 
-  async findAllAdminOnly() {
+  async findAllAdminOnly(request: any): Promise<RetrieveAdvisors> {
+    const { page = 1 } = request.query;
+    const { paginationOptions } = request;
     const advisors = await this.prisma.advisor.findMany({
       select: {
         id: true,
@@ -82,13 +95,18 @@ export class AdvisorsService {
           },
         },
       },
+      ...paginationOptions,
     });
-    return plainToInstance(Advisor, advisors);
+    return this.prepareResponse(advisors, page);
   }
 
-  async findAllNoAuth() {
+  async findAllNoAuth(request: any): Promise<RetrieveAdvisors> {
+    const { page = 1 } = request.query;
+    const { paginationOptions } = request;
+
     const advisors = await this.prisma.advisor.findMany({
       select: {
+        id: true,
         name: true,
         speciality: {
           select: {
@@ -100,11 +118,17 @@ export class AdvisorsService {
         experience: true,
         image: true,
       },
+      ...paginationOptions,
     });
-    return plainToInstance(Advisor, advisors);
+    return this.prepareResponse(advisors, page);
   }
 
-  async filterPerSpecialityId(speciality_id: string) {
+  async filterPerSpecialityId(
+    request: any,
+    speciality_id: string,
+  ): Promise<RetrieveAdvisors> {
+    const { page = 1 } = request.query;
+    const { paginationOptions } = request;
     const filteredAdvisors = await this.prisma.advisor.findMany({
       where: { speciality_id },
       select: {
@@ -115,11 +139,18 @@ export class AdvisorsService {
         experience: true,
         image: true,
       },
+      ...paginationOptions,
     });
 
-    return plainToInstance(Advisor, filteredAdvisors);
+    return this.prepareResponse(filteredAdvisors, page);
   }
-  async filterPerExperience(experience: Experience) {
+
+  async filterPerExperience(
+    request: any,
+    experience: Experience,
+  ): Promise<RetrieveAdvisors> {
+    const { page = 1 } = request.query;
+    const { paginationOptions } = request;
     const filteredAdvisors = await this.prisma.advisor.findMany({
       where: { experience },
       select: {
@@ -134,10 +165,12 @@ export class AdvisorsService {
         updated_at: true,
         image: true,
       },
+      ...paginationOptions,
     });
 
-    return plainToInstance(Advisor, filteredAdvisors);
+    return this.prepareResponse(filteredAdvisors, page);
   }
+
   async findByEmail(email: string) {
     const advisor = await this.prisma.advisor.findUnique({
       where: { email },
