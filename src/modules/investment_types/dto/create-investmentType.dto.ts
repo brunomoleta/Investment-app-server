@@ -1,11 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export enum Risk {
   Low = 'low',
   Moderate = 'moderate',
   High = 'high',
-  VeryHigh = 'very_high'
+  VeryHigh = 'very_high',
 }
 
 export class CreateInvestmentTypeDto {
@@ -19,5 +25,5 @@ export class CreateInvestmentTypeDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsEnum(Risk)
-  risk: Risk = Risk.Low
+  risk: Risk = Risk.Low;
 }

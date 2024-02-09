@@ -6,7 +6,7 @@ export enum InvestmentAmount {
   Starter = 'starter',
   WellRounded = 'well-rounded',
   Multimillionaire = 'multimillionaire',
-  Wealthy = 'wealthy'
+  Wealthy = 'wealthy',
 }
 
 export class CreateInvestorDto extends CreateUserDto {

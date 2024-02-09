@@ -1,5 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { PrismaService } from '../../database/prisma.service';
 import { plainToInstance } from 'class-transformer';
@@ -10,8 +13,7 @@ import { Advisor } from '../advisors/entities/advisor.entity';
 
 @Injectable()
 export class InvestmentTypeService {
-  constructor(private readonly prisma: PrismaService) {
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createInvestmentTypeDto: CreateInvestmentTypeDto) {
     const existingInvestment = await this.prisma.investmentType.findFirst({
@@ -40,33 +42,31 @@ export class InvestmentTypeService {
   }
 
   async findAllAdminOnly() {
-    const advisors = await this.prisma.investmentType.findMany(
-      {
-        select: {
-          id: true,
-          type_name: true,
+    const advisors = await this.prisma.investmentType.findMany({
+      select: {
+        id: true,
+        type_name: true,
 
-          advisors: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              image: true,
-              phone_number: true,
-              experience: true,
-              created_at: true,
-              investors: {
-                select: {
-                  name: true,
-                  amount: true,
-                  created_at: true,
-                },
+        advisors: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            phone_number: true,
+            experience: true,
+            created_at: true,
+            investors: {
+              select: {
+                name: true,
+                amount: true,
+                created_at: true,
               },
             },
           },
         },
       },
-    );
+    });
     return plainToInstance(Advisor, advisors);
   }
 
@@ -85,7 +85,7 @@ export class InvestmentTypeService {
         },
       },
     });
-    return plainToInstance(InvestmentType, filteredInvestmentTypes)
+    return plainToInstance(InvestmentType, filteredInvestmentTypes);
   }
 
   async findByName(name: string) {
@@ -93,9 +93,8 @@ export class InvestmentTypeService {
       where: { type_name: name },
     });
 
-    if (!investment_type) throw new NotFoundException(
-      'This investment_type\'s name was not found',
-    );
+    if (!investment_type)
+      throw new NotFoundException("This investment_type's name was not found");
 
     return plainToInstance(InvestmentType, investment_type);
   }
@@ -105,9 +104,8 @@ export class InvestmentTypeService {
       where: { id },
     });
 
-    if (!investment_type) throw new NotFoundException(
-      'This investment_type was not found',
-    );
+    if (!investment_type)
+      throw new NotFoundException('This investment_type was not found');
 
     return plainToInstance(InvestmentType, investment_type);
   }
@@ -126,12 +124,11 @@ export class InvestmentTypeService {
       where: { id },
     });
 
-    if (!removeInvestment) throw new NotFoundException(
-      'This investment type was not found',
-    );
+    if (!removeInvestment)
+      throw new NotFoundException('This investment type was not found');
 
-    await this.prisma.investmentType.delete(({
+    await this.prisma.investmentType.delete({
       where: { id },
-    }));
+    });
   }
 }

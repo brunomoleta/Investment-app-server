@@ -8,5 +8,4 @@ export class Investor extends User {
     super();
     this.access_type = 'investor';
   }
-
 }

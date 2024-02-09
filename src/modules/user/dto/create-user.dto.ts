@@ -1,6 +1,13 @@
 import { CreateAdminDto } from '../../admin/dto/create-admin.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsOptional, IsString, Length, MaxLength, MinLength } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserDto extends CreateAdminDto {
   @ApiProperty()
