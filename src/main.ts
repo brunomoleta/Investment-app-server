@@ -18,7 +18,6 @@ async function bootstrap() {
   app.useGlobalInterceptors(new PaginationInterceptor());
 
   const ngrokPattern = /https:\/\/[a-zA-Z0-9-]+\.ngrok-free\.app(.*)/;
-  const regexPattern: RegExp = /.durvalmusicshop.*\.vercel\.app.*/;
   const localUrl: string = 'http://localhost:3000';
   const acceptedValuesArray = [localUrl, ngrokPattern];
 
@@ -31,16 +30,16 @@ async function bootstrap() {
   app.enableCors(corsOptions);
 
   const config = new DocumentBuilder()
-    .setTitle("Mo'money less problems app Back-end")
+    .setTitle('Investing with a personal advisor app Back-end')
     .setDescription(
       'Back-end nest.js app that connects investors with investment advisors',
     )
     .setVersion('1.0.0')
+    .addTag('admin')
     .addTag('login')
-    .addTag('advisors')
-    .addTag('investors')
-    .addTag('intestment-types')
-    .addTag('products')
+    .addTag('advisor')
+    .addTag('investor')
+    .addTag('investment_type')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('doc', app, document);
