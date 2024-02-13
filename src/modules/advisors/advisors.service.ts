@@ -82,6 +82,7 @@ export class AdvisorsService {
         created_at: true,
         updated_at: true,
         experience: true,
+        bio: true,
         image: true,
         investors: {
           select: {
@@ -116,6 +117,7 @@ export class AdvisorsService {
         created_at: true,
         updated_at: true,
         experience: true,
+        bio: true,
         image: true,
       },
       ...paginationOptions,
@@ -185,6 +187,33 @@ export class AdvisorsService {
   async findById(id: string) {
     const advisor = await this.prisma.advisor.findUnique({
       where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone_number: true,
+
+        speciality: true,
+        speciality_id: true,
+
+        created_at: true,
+        updated_at: true,
+
+        experience: true,
+        bio: true,
+        image: true,
+
+        investors: {
+          select: {
+            id: true,
+            name: true,
+            amount: true,
+            image: true,
+            email: true,
+            phone_number: true,
+          },
+        },
+      },
     });
 
     if (!advisor) throw new NotFoundException('This advisor was not found');

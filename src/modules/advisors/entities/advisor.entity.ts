@@ -5,6 +5,8 @@ export class Advisor extends User {
 
   speciality_id: string;
 
+  bio: string;
+
   constructor() {
     super();
     this.access_type = 'advisor';

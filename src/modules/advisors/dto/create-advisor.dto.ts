@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { CreateUserDto } from '../../user/dto/create-user.dto';
 
@@ -17,4 +17,9 @@ export class CreateAdvisorDto extends CreateUserDto {
 
   @IsString()
   speciality_id: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(240)
+  bio: string;
 }
