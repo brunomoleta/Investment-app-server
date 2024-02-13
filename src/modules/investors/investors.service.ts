@@ -104,6 +104,23 @@ export class InvestorsService {
   async findById(id: string) {
     const investor = await this.prisma.investor.findUnique({
       where: { id },
+      select: {
+        id: true,
+        name: true,
+        phone_number: true,
+        image: true,
+        amount: true,
+        email: true,
+        created_at: true,
+        advisor: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone_number: true,
+          },
+        },
+      },
     });
 
     if (!investor) throw new NotFoundException('This investor was not found');
