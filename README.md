@@ -235,12 +235,12 @@ Abaixo o detalhamento da estrutura:
 | DELETE     | /admin                                | Remove administrador                                 | Usuário autenticado   |
 
 
-Para mais informações, consulte a documentação disponível em [http://localhost:3000/doc](http://localhost:3000/doc) ou
-em [https://easy-contacts-svuu.onrender.com/doc](https://easy-contacts-svuu.onrender.com/doc).
+Para mais informações, consulte a documentação disponível em [http://localhost:3001/doc](http://localhost:3000/doc) ou
+em [https://alguma-coisa.onrender.com/doc](https://easy-contacts-svuu.onrender.com/doc).
 
 ## Deploy
 
-Para testar a aplicação em produção, esta está disponível em [palavra que aparece](link de fato).
+Para testar a aplicação em produção, esta está disponível em [palavra-que-aparece](link-de-fato).
 
 ## Contato
 
