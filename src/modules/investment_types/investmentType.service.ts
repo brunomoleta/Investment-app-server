@@ -9,11 +9,24 @@ import { plainToInstance } from 'class-transformer';
 import { CreateInvestmentTypeDto, Risk } from './dto/create-investmentType.dto';
 import { InvestmentType } from './entities/investmentType.entity';
 import { UpdateInvestmentTypeDto } from './dto/update-investmentType.dto';
-import { Advisor } from '../advisors/entities/advisor.entity';
+import { RetrieveInvestmentTypes } from './investment_types';
 
 @Injectable()
 export class InvestmentTypeService {
   constructor(private readonly prisma: PrismaService) {}
+
+  prepareResponse(
+    investment_types: InvestmentType[],
+    page: number,
+  ): RetrieveInvestmentTypes {
+    return {
+      investment_types: plainToInstance(InvestmentType, investment_types),
+      info: {
+        page: Number(page),
+        perPage: Number(investment_types.length),
+      },
+    };
+  }
 
   async create(createInvestmentTypeDto: CreateInvestmentTypeDto) {
     const existingInvestment = await this.prisma.investmentType.findFirst({
@@ -36,16 +49,29 @@ export class InvestmentTypeService {
     return plainToInstance(InvestmentType, newInvestmentType);
   }
 
-  async findAll() {
-    const investment_types = await this.prisma.investmentType.findMany();
-    return plainToInstance(InvestmentType, investment_types);
-  }
+  async findAll(request: any): Promise<RetrieveInvestmentTypes> {
+    const { page = 1 } = request.query;
+    const { paginationOptions } = request;
 
-  async findAllAdminOnly() {
-    const advisors = await this.prisma.investmentType.findMany({
+    const investment_types = await this.prisma.investmentType.findMany({
       select: {
         id: true,
         type_name: true,
+        risk: true,
+      },
+      ...paginationOptions,
+    });
+    return this.prepareResponse(investment_types, page);
+  }
+
+  async findAllAdminOnly(request: any): Promise<RetrieveInvestmentTypes> {
+    const { page = 1 } = request.query;
+    const { paginationOptions } = request;
+    const investment_types = await this.prisma.investmentType.findMany({
+      select: {
+        id: true,
+        type_name: true,
+        risk: true,
 
         advisors: {
           select: {
@@ -66,11 +92,17 @@ export class InvestmentTypeService {
           },
         },
       },
+      ...paginationOptions,
     });
-    return plainToInstance(Advisor, advisors);
+    return this.prepareResponse(investment_types, page);
   }
 
-  async filteredByRisk(risk: Risk) {
+  async filteredByRisk(
+    request: any,
+    risk: Risk,
+  ): Promise<RetrieveInvestmentTypes> {
+    const { page = 1 } = request.query;
+    const { paginationOptions } = request;
     const filteredInvestmentTypes = await this.prisma.investmentType.findMany({
       where: { risk },
       select: {
@@ -84,8 +116,9 @@ export class InvestmentTypeService {
           },
         },
       },
+      ...paginationOptions,
     });
-    return plainToInstance(InvestmentType, filteredInvestmentTypes);
+    return this.prepareResponse(filteredInvestmentTypes, page);
   }
 
   async findByName(name: string) {

@@ -7,6 +7,8 @@ import {
   Param,
   Patch,
   Post,
+  Req,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { JwtGuard } from '../session/jwt.guard';
@@ -14,7 +16,7 @@ import { InvestmentTypeService } from './investmentType.service';
 import { CreateInvestmentTypeDto, Risk } from './dto/create-investmentType.dto';
 import { UpdateInvestmentTypeDto } from './dto/update-investmentType.dto';
 
-@Controller('type')
+@Controller('investment_type')
 export class InvestmentTypeController {
   constructor(private readonly investmentTypeService: InvestmentTypeService) {}
 
@@ -26,21 +28,21 @@ export class InvestmentTypeController {
 
   @Get('all')
   @UseGuards(JwtGuard)
-  findAllAdminOnly() {
-    return this.investmentTypeService.findAllAdminOnly();
+  findAllAdminOnly(@Req() request: Request) {
+    return this.investmentTypeService.findAllAdminOnly(request);
   }
 
   @Get()
-  findAll() {
-    return this.investmentTypeService.findAll();
+  findAll(@Req() request: Request) {
+    return this.investmentTypeService.findAll(request);
   }
 
-  @Get(':risk')
-  filteredByRisk(@Param('risk') risk: Risk) {
-    return this.investmentTypeService.filteredByRisk(risk);
+  @Get('risk/:risk')
+  filteredByRisk(@Req() request: Request, @Param('risk') risk: Risk) {
+    return this.investmentTypeService.filteredByRisk(request, risk);
   }
 
-  @Get(':name')
+  @Get('name/:name')
   findByName(@Param('name') type_name: string) {
     return this.investmentTypeService.findByName(type_name);
   }
