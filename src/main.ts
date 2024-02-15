@@ -19,7 +19,8 @@ async function bootstrap() {
 
   const ngrokPattern = /https:\/\/[a-zA-Z0-9-]+\.ngrok-free\.app(.*)/;
   const localUrl: string = 'http://localhost:3000';
-  const acceptedValuesArray = [localUrl, ngrokPattern];
+  const production = 'https://investment-app-client-brunomoleta.vercel.app/';
+  const acceptedValuesArray = [localUrl, ngrokPattern, production];
 
   const corsOptions = {
     origin: acceptedValuesArray,
