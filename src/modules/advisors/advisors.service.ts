@@ -252,7 +252,6 @@ export class AdvisorsService {
   }
 
   async update(id: string, updateAdvisorDto: UpdateAdvisorDto) {
-
     if (!id) {
       throw new Error('Id returned undefined.');
     }
