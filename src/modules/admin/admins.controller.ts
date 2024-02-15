@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  Patch,
   Post,
   Request,
   UseGuards,
@@ -14,6 +15,7 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { JwtGuard } from '../session/jwt.guard';
 import { decode } from 'jsonwebtoken';
 import { ApiResponse } from '@nestjs/swagger';
+import { UpdatePasswordDto } from '../user/dto/update-password.dto';
 
 @Controller('admin')
 export class AdminsController {
@@ -50,6 +52,25 @@ export class AdminsController {
     const decoded: any = decode(token);
 
     return this.adminsService.findById(decoded.sub);
+  }
+
+  @Patch('password')
+  @ApiResponse({
+    status: 200,
+    description: "Update admin's password after validating his current.",
+  })
+  @UseGuards(JwtGuard)
+  async changePassword(
+    @Request() request: any,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ) {
+    const token = request.headers.authorization.split(' ')[1];
+    const decoded: any = decode(token);
+
+    return await this.adminsService.updatePassword(
+      decoded.sub,
+      updatePasswordDto,
+    );
   }
 
   @HttpCode(204)

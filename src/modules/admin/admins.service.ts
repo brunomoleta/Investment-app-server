@@ -8,6 +8,8 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { Admin } from './entities/admin.entity';
 import { PrismaService } from '../../database/prisma.service';
 import { plainToInstance } from 'class-transformer';
+import { UpdatePasswordDto } from '../user/dto/update-password.dto';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AdminsService {
@@ -56,6 +58,34 @@ export class AdminsService {
     if (!admin) throw new NotFoundException('This admin was not found');
 
     return plainToInstance(Admin, admin);
+  }
+
+  async updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
+    const admin = await this.prisma.admin.findUnique({
+      where: { id },
+    });
+
+    if (!admin) {
+      throw new NotFoundException('This admin does not exist.');
+    }
+
+    const passwordMatch = await bcrypt.compare(
+      updatePasswordDto.currentPassword,
+      admin.password,
+    );
+
+    if (!passwordMatch) {
+      throw new ConflictException('Invalid password.');
+    }
+
+    const hashedPassword = await bcrypt.hash(updatePasswordDto.newPassword, 10);
+
+    await this.prisma.admin.update({
+      where: { id },
+      data: { password: hashedPassword },
+    });
+
+    return { message: 'Password successfully updated' };
   }
 
   async remove(id: string): Promise<void> {

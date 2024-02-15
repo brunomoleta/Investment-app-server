@@ -16,6 +16,7 @@ import { UpdateAdvisorDto } from '../advisors/dto/update-advisor.dto';
 import { JwtGuard } from '../session/jwt.guard';
 import { decode } from 'jsonwebtoken';
 import { ApiResponse } from '@nestjs/swagger';
+import { UpdatePasswordDto } from '../user/dto/update-password.dto';
 
 @Controller('investor')
 export class InvestorsController {
@@ -84,6 +85,25 @@ export class InvestorsController {
     const decoded: any = decode(token);
 
     return this.investorsService.update(decoded.sub, updateAdvisorDto);
+  }
+
+  @Patch('password')
+  @ApiResponse({
+    status: 200,
+    description: "Update investor's password after validating his current.",
+  })
+  @UseGuards(JwtGuard)
+  async changePassword(
+    @Request() request: any,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ) {
+    const token = request.headers.authorization.split(' ')[1];
+    const decoded: any = decode(token);
+
+    return await this.investorsService.updatePassword(
+      decoded.sub,
+      updatePasswordDto,
+    );
   }
 
   @HttpCode(204)

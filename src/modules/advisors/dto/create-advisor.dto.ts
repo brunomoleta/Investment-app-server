@@ -15,9 +15,11 @@ export class CreateAdvisorDto extends CreateUserDto {
   @IsEnum(Experience)
   experience: Experience = Experience.Beginner;
 
+  @ApiProperty()
   @IsString()
   speciality_id: string;
 
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   @MaxLength(240)

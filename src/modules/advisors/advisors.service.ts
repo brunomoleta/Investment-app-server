@@ -10,6 +10,8 @@ import { plainToInstance } from 'class-transformer';
 import { CreateAdvisorDto, Experience } from './dto/create-advisor.dto';
 import { UpdateAdvisorDto } from './dto/update-advisor.dto';
 import { RetrieveAdvisors } from './advisors';
+import * as bcrypt from 'bcryptjs';
+import { UpdatePasswordDto } from '../user/dto/update-password.dto';
 
 @Injectable()
 export class AdvisorsService {
@@ -221,8 +223,39 @@ export class AdvisorsService {
     return plainToInstance(Advisor, advisor);
   }
 
+  async updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
+    const advisor = await this.prisma.advisor.findUnique({
+      where: { id },
+    });
+
+    if (!advisor) {
+      throw new NotFoundException('This advisor does not exist.');
+    }
+
+    const passwordMatch = await bcrypt.compare(
+      updatePasswordDto.currentPassword,
+      advisor.password,
+    );
+
+    if (!passwordMatch) {
+      throw new ConflictException('Invalid password.');
+    }
+
+    const hashedPassword = await bcrypt.hash(updatePasswordDto.newPassword, 10);
+
+    await this.prisma.advisor.update({
+      where: { id },
+      data: { password: hashedPassword },
+    });
+
+    return { message: 'Password successfully updated' };
+  }
+
   async update(id: string, updateAdvisorDto: UpdateAdvisorDto) {
-    const findAdvisor = await this.prisma.advisor.findUnique({
+    if (!id) {
+      throw new Error('Id returned undefined.');
+    }
+    const findAdvisor = await this.prisma.advisor.findFirst({
       where: { id },
     });
 
@@ -246,7 +279,6 @@ export class AdvisorsService {
       where: { id },
       data: updateAdvisorDto,
     });
-    console.log(updatedAdvisor);
 
     return plainToInstance(Advisor, updatedAdvisor);
   }

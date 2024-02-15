@@ -18,6 +18,7 @@ import { UpdateAdvisorDto } from './dto/update-advisor.dto';
 import { decode } from 'jsonwebtoken';
 import { RetrieveAdvisors } from './advisors';
 import { ApiResponse } from '@nestjs/swagger';
+import { UpdatePasswordDto } from '../user/dto/update-password.dto';
 
 @Controller('advisor')
 export class AdvisorsController {
@@ -26,7 +27,7 @@ export class AdvisorsController {
   @Post()
   @ApiResponse({
     status: 200,
-    description: 'Create advisor with all the info.',
+    description: 'Create an advisor.',
   })
   create(@Body() createAdvisorDto: CreateAdvisorDto) {
     return this.advisorsService.create(createAdvisorDto);
@@ -78,7 +79,7 @@ export class AdvisorsController {
   @Get('id')
   @ApiResponse({
     status: 200,
-    description: 'Retrieve advisor through the token',
+    description: 'Retrieve an advisor through the token',
   })
   @UseGuards(JwtGuard)
   findById(@Request() request: any) {
@@ -88,11 +89,30 @@ export class AdvisorsController {
     return this.advisorsService.findById(decoded.sub);
   }
 
+  @Patch('password')
+  @ApiResponse({
+    status: 200,
+    description: "Update advisor's password after validating his current.",
+  })
+  @UseGuards(JwtGuard)
+  async changePassword(
+    @Request() request: any,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ) {
+    const token = request.headers.authorization.split(' ')[1];
+    const decoded: any = decode(token);
+
+    return await this.advisorsService.updatePassword(
+      decoded.sub,
+      updatePasswordDto,
+    );
+  }
+
   @Patch()
   @UseGuards(JwtGuard)
   @ApiResponse({
     status: 200,
-    description: 'Update specific advisor through the token',
+    description: 'Update an advisor data through the token',
   })
   update(@Request() request: any, @Body() updateAdvisorDto: UpdateAdvisorDto) {
     const token = request.headers.authorization.split(' ')[1];
@@ -106,7 +126,7 @@ export class AdvisorsController {
   @UseGuards(JwtGuard)
   @ApiResponse({
     status: 204,
-    description: 'Remove specific advisor through the token',
+    description: 'Remove an advisor through the token',
   })
   remove(@Request() request: any) {
     const token = request.headers.authorization.split(' ')[1];

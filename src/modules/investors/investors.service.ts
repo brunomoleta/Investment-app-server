@@ -9,6 +9,8 @@ import { plainToInstance } from 'class-transformer';
 import { CreateInvestorDto } from './dto/create-investor.dto';
 import { Investor } from './entities/investor.entity';
 import { UpdateInvestorDto } from './dto/update-investor.dto';
+import * as bcrypt from 'bcryptjs';
+import { UpdatePasswordDto } from '../user/dto/update-password.dto';
 
 @Injectable()
 export class InvestorsService {
@@ -126,6 +128,34 @@ export class InvestorsService {
     if (!investor) throw new NotFoundException('This investor was not found');
 
     return plainToInstance(Investor, investor);
+  }
+
+  async updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
+    const investor = await this.prisma.investor.findUnique({
+      where: { id },
+    });
+
+    if (!investor) {
+      throw new NotFoundException('This investor does not exist.');
+    }
+
+    const passwordMatch = await bcrypt.compare(
+      updatePasswordDto.currentPassword,
+      investor.password,
+    );
+
+    if (!passwordMatch) {
+      throw new ConflictException('Invalid password.');
+    }
+
+    const hashedPassword = await bcrypt.hash(updatePasswordDto.newPassword, 10);
+
+    await this.prisma.investor.update({
+      where: { id },
+      data: { password: hashedPassword },
+    });
+
+    return { message: 'Password successfully updated' };
   }
 
   async update(id: string, updateInvestorDto: UpdateInvestorDto) {
