@@ -96,7 +96,7 @@ Execute os scripts utilizando `npm run` ou `yarn run`.
 1. Clone o repositório:
 
 ```bash
-git clone git@github.com:brunomoleta/Investment-app-server.git
+git clone git@github.com:brunomoleta/Investment-app-client.git
 ```
 
 2. Instale as dependências:
@@ -211,6 +211,7 @@ Abaixo o detalhamento da estrutura:
 | GET        | /investor/advisor/:advisor_id         | Filtra investidores por assessor                     | Usuário autenticado   |
 | GET        | /investor/amount/:amount              | Filtra investidores por capital($)                   | Usuário autenticado   |
 | PATCH      | /investor                             | Altera dados do investidor pelo Token                | Usuário autenticado   |
+| PATCH      | /investor/password                    | Valida a senha atual e substitui por uma nova        | Usuário autenticado   |
 | DELETE     | /investor                             | Exclui investidor pelo Token                         | Usuário autenticado   |
 | ---------- | -------------------------------       | --------------------------------------------         | --------------------- |
 | POST       | /advisor                              | Cria um assessor                                     | Acesso universal      |
@@ -220,6 +221,7 @@ Abaixo o detalhamento da estrutura:
 | GET        | /advisor/experience/:experience       | Filtra assessores através da experiência             | Acesso universal      |
 | GET        | /advisor/id                           | Lista assessor através do token                      | Usuário autenticado   |
 | PATCH      | /advisor                              | Atualiza assessor através do token                   | Usuário autenticado   |
+| PATCH      | /advisor/password                     | Valida a senha atual e substitui por uma nova        | Usuário autenticado   |
 | DELETE     | /advisor                              | Remove assesor através do token                      | Usuário autenticado   |
 | ---------- | -------------------------------       | --------------------------------------------         | --------------------- |
 | POST       | /investment_type                      | Cria categoria de investimento                       | Usuário autenticado   |
@@ -232,15 +234,17 @@ Abaixo o detalhamento da estrutura:
 | POST       | /admin                                | Cria administrador                                   | Usuário autenticado   |
 | GET        | /admin                                | Lista administradores                                | Usuário autenticado   |
 | GET        | /admin/id                             | Lista admin através do Token                         | Usuário autenticado   |
+| PATCH      | /admin/password                       | Valida a senha atual e substitui por uma nova        | Usuário autenticado   |
 | DELETE     | /admin                                | Remove administrador                                 | Usuário autenticado   |
 
-
-Para mais informações, consulte a documentação disponível em [http://localhost:3001/doc](http://localhost:3000/doc) ou
-em [https://alguma-coisa.onrender.com/doc](https://easy-contacts-svuu.onrender.com/doc).
+Para mais informações, consulte a documentação disponível
+em [local-swagger](http://localhost:3001/doc)(se rodando localmente) ou
+em [deployed-swagger](https://easy-contacts-svuu.onrender.com/doc)(deploy).
 
 ## Deploy
 
-Para testar a aplicação em produção, esta está disponível em [palavra-que-aparece](link-de-fato).
+Para testar a aplicação em produção, esta está disponível
+em [investing-back-end](https://investment-fullstack.onrender.com).
 
 ## Contato
 

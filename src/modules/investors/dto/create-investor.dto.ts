@@ -15,6 +15,7 @@ export class CreateInvestorDto extends CreateUserDto {
   @IsEnum(InvestmentAmount)
   amount: InvestmentAmount = InvestmentAmount.Starter;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   advisor_id!: string;
