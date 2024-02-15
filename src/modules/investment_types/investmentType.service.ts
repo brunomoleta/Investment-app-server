@@ -121,17 +121,6 @@ export class InvestmentTypeService {
     return this.prepareResponse(filteredInvestmentTypes, page);
   }
 
-  async findByName(name: string) {
-    const investment_type = await this.prisma.investmentType.findFirst({
-      where: { type_name: name },
-    });
-
-    if (!investment_type)
-      throw new NotFoundException("This investment_type's name was not found");
-
-    return plainToInstance(InvestmentType, investment_type);
-  }
-
   async findById(id: string) {
     const investment_type = await this.prisma.investmentType.findUnique({
       where: { id },
