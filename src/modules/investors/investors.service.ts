@@ -159,6 +159,30 @@ export class InvestorsService {
   }
 
   async update(id: string, updateInvestorDto: UpdateInvestorDto) {
+    if (!id) {
+      throw new Error('Id returned undefined.');
+    }
+
+    const findInvestor = await this.prisma.investor.findFirst({
+      where: { id },
+    });
+
+    if (!findInvestor) {
+      throw new NotFoundException('This investor does not exists.');
+    }
+
+    if (updateInvestorDto.email) {
+      const emailExists = await this.prisma.investor.findFirst({
+        where: { email: updateInvestorDto.email },
+      });
+
+      if (emailExists && emailExists.id !== id) {
+        throw new ConflictException(
+          'This email belongs to another user. Please try another one.',
+        );
+      }
+    }
+
     const updatedInvestor = await this.prisma.investor.update({
       where: { id },
       data: updateInvestorDto,
