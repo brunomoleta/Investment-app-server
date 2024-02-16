@@ -12,11 +12,11 @@ import {
 } from '@nestjs/common';
 import { InvestorsService } from './investors.service';
 import { CreateInvestorDto, InvestmentAmount } from './dto/create-investor.dto';
-import { UpdateAdvisorDto } from '../advisors/dto/update-advisor.dto';
 import { JwtGuard } from '../session/jwt.guard';
 import { decode } from 'jsonwebtoken';
 import { ApiResponse } from '@nestjs/swagger';
 import { UpdatePasswordDto } from '../user/dto/update-password.dto';
+import { UpdateInvestorDto } from './dto/update-investor.dto';
 
 @Controller('investor')
 export class InvestorsController {
@@ -80,11 +80,14 @@ export class InvestorsController {
     description: 'Update specific investor through the token',
   })
   @UseGuards(JwtGuard)
-  update(@Request() request: any, @Body() updateAdvisorDto: UpdateAdvisorDto) {
+  update(
+    @Request() request: any,
+    @Body() updateInvestorDto: UpdateInvestorDto,
+  ) {
     const token = request.headers.authorization.split(' ')[1];
     const decoded: any = decode(token);
 
-    return this.investorsService.update(decoded.sub, updateAdvisorDto);
+    return this.investorsService.update(decoded.sub, updateInvestorDto);
   }
 
   @Patch('password')
