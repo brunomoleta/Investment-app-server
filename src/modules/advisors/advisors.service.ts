@@ -195,8 +195,13 @@ export class AdvisorsService {
         email: true,
         phone_number: true,
 
-        speciality: true,
-        speciality_id: true,
+        speciality: {
+          select: {
+            id: true,
+            risk: true,
+            type_name: true,
+          },
+        },
 
         created_at: true,
         updated_at: true,
