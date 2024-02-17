@@ -15,9 +15,10 @@ import { JwtGuard } from '../session/jwt.guard';
 import { InvestmentTypeService } from './investmentType.service';
 import { CreateInvestmentTypeDto, Risk } from './dto/create-investmentType.dto';
 import { UpdateInvestmentTypeDto } from './dto/update-investmentType.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('investment_type')
+@ApiTags('investment_type')
 export class InvestmentTypeController {
   constructor(private readonly investmentTypeService: InvestmentTypeService) {}
 
