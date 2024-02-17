@@ -98,7 +98,7 @@ export class InvestorsService {
     });
 
     if (!investor)
-      throw new NotFoundException("This investors's email was not found");
+      throw new NotFoundException("Investor's invalid email or password");
 
     return investor;
   }
@@ -120,6 +120,10 @@ export class InvestorsService {
             name: true,
             email: true,
             phone_number: true,
+            speciality: true,
+            experience: true,
+            image: true,
+            bio: true,
           },
         },
       },
