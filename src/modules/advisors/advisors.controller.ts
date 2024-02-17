@@ -17,17 +17,36 @@ import { JwtGuard } from '../session/jwt.guard';
 import { UpdateAdvisorDto } from './dto/update-advisor.dto';
 import { decode } from 'jsonwebtoken';
 import { RetrieveAdvisors } from './advisors';
-import { ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UpdatePasswordDto } from '../user/dto/update-password.dto';
+import { Advisor } from './entities/advisor.entity';
+import { RetrieveAdvisorDto } from './dto/retrieve-advisor.dto';
 
 @Controller('advisor')
+@ApiTags('advisor')
 export class AdvisorsController {
   constructor(private readonly advisorsService: AdvisorsService) {}
 
   @Post()
-  @ApiResponse({
-    status: 200,
-    description: 'Create an advisor.',
+  @ApiCreatedResponse({
+    description: 'Advisor created successfully',
+    isArray: false,
+    type: Advisor,
+  })
+  @ApiConflictResponse({
+    description: 'Conflict. This email already exists',
+  })
+  @ApiBadRequestResponse({
+    description: "Bad request. There's missing data",
   })
   create(@Body() createAdvisorDto: CreateAdvisorDto) {
     return this.advisorsService.create(createAdvisorDto);
@@ -77,8 +96,9 @@ export class AdvisorsController {
   }
 
   @Get('id')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
+    type: RetrieveAdvisorDto,
+    isArray: false,
     description: 'Retrieve an advisor through the token',
   })
   @UseGuards(JwtGuard)
@@ -90,9 +110,15 @@ export class AdvisorsController {
   }
 
   @Patch('password')
-  @ApiResponse({
-    status: 200,
-    description: "Update advisor's password after validating his current.",
+  @ApiOkResponse({
+    description: "Update investor's password after validating his current one.",
+  })
+  @ApiBadRequestResponse({
+    description:
+      'New password has to use guidelines specified at update-password.dto',
+  })
+  @ApiConflictResponse({
+    description: 'Conflict. Invalid password.',
   })
   @UseGuards(JwtGuard)
   async changePassword(
@@ -121,12 +147,13 @@ export class AdvisorsController {
     return this.advisorsService.update(decoded.sub, updateAdvisorDto);
   }
 
-  @HttpCode(204)
   @Delete()
   @UseGuards(JwtGuard)
-  @ApiResponse({
-    status: 204,
-    description: 'Remove an advisor through the token',
+  @ApiNoContentResponse({
+    description: 'Deleted an investor through the token successfully',
+  })
+  @ApiNotFoundResponse({
+    description: 'Not Found',
   })
   remove(@Request() request: any) {
     const token = request.headers.authorization.split(' ')[1];
