@@ -45,7 +45,8 @@ export class AdminsService {
       where: { email },
     });
 
-    if (!admin) throw new NotFoundException("This admin's email was not found");
+    if (!admin)
+      throw new NotFoundException("Admin's invalid email or password");
 
     return admin;
   }
