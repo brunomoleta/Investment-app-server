@@ -181,7 +181,7 @@ export class AdvisorsService {
     });
 
     if (!advisor)
-      throw new NotFoundException("This advisor's email was not found");
+      throw new NotFoundException("Advisor's invalid email or password");
 
     return advisor;
   }

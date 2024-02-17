@@ -10,16 +10,25 @@ export enum Experience {
 }
 
 export class CreateAdvisorDto extends CreateUserDto {
-  @ApiProperty()
+  @ApiProperty({
+    type: String,
+    description: 'Required property',
+  })
   @IsNotEmpty()
   @IsEnum(Experience)
-  experience: Experience = Experience.Beginner;
+  experience: Experience;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: String,
+    description: 'Readonly property',
+  })
   @IsString()
   speciality_id: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: String,
+    description: 'Required property',
+  })
   @IsString()
   @IsNotEmpty()
   @MaxLength(240)

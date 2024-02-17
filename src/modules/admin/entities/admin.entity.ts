@@ -1,17 +1,35 @@
 import { Exclude } from 'class-transformer';
 import { randomUUID } from 'node:crypto';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class Admin {
+  @ApiProperty({
+    type: String,
+    description: 'Readonly property',
+  })
   readonly id: string;
-  email!: string;
 
+  @ApiProperty({
+    type: String,
+    description: 'Required property',
+  })
   name!: string;
 
-  @Exclude()
-  access_type: string;
+  @ApiProperty({
+    type: String,
+    description: 'Required property',
+  })
+  email: string;
 
   @Exclude()
-  password!: string;
+  password: string;
+
+  @ApiProperty({
+    type: String,
+    description: 'Readonly property',
+  })
+  @Exclude()
+  access_type: string;
 
   constructor() {
     this.id = randomUUID();

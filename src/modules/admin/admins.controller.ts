@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
   Patch,
   Post,
   Request,
@@ -14,17 +13,31 @@ import { AdminsService } from './admins.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { JwtGuard } from '../session/jwt.guard';
 import { decode } from 'jsonwebtoken';
-import { ApiResponse } from '@nestjs/swagger';
+import {
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UpdatePasswordDto } from '../user/dto/update-password.dto';
+import { Admin } from './entities/admin.entity';
 
 @Controller('admin')
+@ApiTags('admin')
 export class AdminsController {
   constructor(private readonly adminsService: AdminsService) {}
 
   @Post()
-  @ApiResponse({
-    status: 200,
-    description: 'Create admin',
+  @ApiCreatedResponse({
+    description: 'Admin created successfully',
+    isArray: false,
+    type: Admin,
+  })
+  @ApiConflictResponse({
+    description: 'This email already exists',
   })
   @UseGuards(JwtGuard)
   create(@Body() createAdminDto: CreateAdminDto) {
@@ -32,9 +45,10 @@ export class AdminsController {
   }
 
   @Get()
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'List admins',
+    type: Admin,
+    isArray: true,
   })
   @UseGuards(JwtGuard)
   findAll() {
@@ -42,9 +56,10 @@ export class AdminsController {
   }
 
   @Get('id')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
+    isArray: false,
     description: 'Get specific admin through the token',
+    type: Admin,
   })
   @UseGuards(JwtGuard)
   findById(@Request() request: any) {
@@ -57,7 +72,7 @@ export class AdminsController {
   @Patch('password')
   @ApiResponse({
     status: 200,
-    description: "Update admin's password after validating his current.",
+    description: "Update admin's password after validating his current one.",
   })
   @UseGuards(JwtGuard)
   async changePassword(
@@ -73,12 +88,13 @@ export class AdminsController {
     );
   }
 
-  @HttpCode(204)
   @Delete()
   @UseGuards(JwtGuard)
-  @ApiResponse({
-    status: 204,
-    description: 'Remove specific admin through the token',
+  @ApiNoContentResponse({
+    description: 'Deleted an admin through the token successfully',
+  })
+  @ApiNotFoundResponse({
+    description: 'Not Found',
   })
   remove(@Request() request: any) {
     const token = request.headers.authorization.split(' ')[1];

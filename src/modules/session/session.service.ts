@@ -52,12 +52,16 @@ export class SessionService {
     }
 
     if (!user) {
-      throw new UnauthorizedException('Invalid email or password');
+      throw new UnauthorizedException(
+        `${userType}'s invalid email or password`,
+      );
     }
 
     const passwordMatch = await compare(password, user.password);
     if (!passwordMatch) {
-      throw new UnauthorizedException('Invalid email or password');
+      throw new UnauthorizedException(
+        `${userType}'s invalid email or password`,
+      );
     }
 
     const { id } = user;

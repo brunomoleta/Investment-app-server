@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
   Param,
   Patch,
   Post,
@@ -14,10 +13,20 @@ import { InvestorsService } from './investors.service';
 import { CreateInvestorDto, InvestmentAmount } from './dto/create-investor.dto';
 import { JwtGuard } from '../session/jwt.guard';
 import { decode } from 'jsonwebtoken';
-import { ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiConflictResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UpdatePasswordDto } from '../user/dto/update-password.dto';
 import { UpdateInvestorDto } from './dto/update-investor.dto';
+import { Investor } from './entities/investor.entity';
 
+@ApiTags('investor')
 @Controller('investor')
 export class InvestorsController {
   constructor(private readonly investorsService: InvestorsService) {}
@@ -25,7 +34,9 @@ export class InvestorsController {
   @Post()
   @ApiResponse({
     status: 200,
-    description: 'Create investor.',
+    description: 'Investor created successfully.',
+    isArray: false,
+    type: Investor,
   })
   create(@Body() createInvestorDto: CreateInvestorDto) {
     return this.investorsService.create(createInvestorDto);
@@ -91,9 +102,15 @@ export class InvestorsController {
   }
 
   @Patch('password')
-  @ApiResponse({
-    status: 200,
-    description: "Update investor's password after validating his current.",
+  @ApiOkResponse({
+    description: "Update investor's password after validating his current one.",
+  })
+  @ApiBadRequestResponse({
+    description:
+      'New password has to use guidelines specified at update-password.dto',
+  })
+  @ApiConflictResponse({
+    description: 'Conflict. Invalid password.',
   })
   @UseGuards(JwtGuard)
   async changePassword(
@@ -109,11 +126,12 @@ export class InvestorsController {
     );
   }
 
-  @HttpCode(204)
   @Delete()
-  @ApiResponse({
-    status: 204,
-    description: 'Remove specific investor through the token',
+  @ApiNoContentResponse({
+    description: 'Deleted an investor through the token successfully',
+  })
+  @ApiNotFoundResponse({
+    description: 'Not Found',
   })
   @UseGuards(JwtGuard)
   remove(@Request() request: any) {
