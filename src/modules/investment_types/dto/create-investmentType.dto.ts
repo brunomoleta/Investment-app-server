@@ -15,14 +15,24 @@ export enum Risk {
 }
 
 export class CreateInvestmentTypeDto {
-  @ApiProperty()
+  @ApiProperty({
+    type: String,
+    description: 'Required property',
+  })
   @IsString()
   @IsNotEmpty()
   @MinLength(4)
   @MaxLength(32)
   type_name!: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: String,
+    description:
+      "Required property. It can be either: 'low',\n" +
+      ",'moderate',\n" +
+      ",'high',\n" +
+      "or 'very_high'.",
+  })
   @IsNotEmpty()
   @IsEnum(Risk)
   risk: Risk = Risk.Low;

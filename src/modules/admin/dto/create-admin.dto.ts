@@ -12,25 +12,35 @@ import { Transform } from 'class-transformer';
 import { hashSync } from 'bcryptjs';
 
 export class CreateAdminDto {
-  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   @MinLength(4)
   @MaxLength(64)
+  @ApiProperty({
+    type: String,
+    description: 'Required property',
+  })
   name!: string;
 
-  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   @MinLength(9)
   @MaxLength(64)
   @IsEmail()
+  @ApiProperty({
+    type: String,
+    description: 'Required property',
+  })
   email!: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: String,
+    description: 'Required property',
+  })
   @IsString()
   @IsNotEmpty()
   @IsString()
+  @MinLength(8)
   @Matches(/^(?=.*[a-z])/, {
     message: 'Password does not contain one lowercase letter or more.',
   })

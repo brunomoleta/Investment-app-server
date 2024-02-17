@@ -10,12 +10,23 @@ export enum InvestmentAmount {
 }
 
 export class CreateInvestorDto extends CreateUserDto {
-  @ApiProperty()
+  @ApiProperty({
+    type: String,
+    description:
+      "Required property. It has to be one of the following: 'starter',\n" +
+      "'well-rounded',\n" +
+      "'multimillionaire',\n" +
+      "or 'wealthy'",
+  })
   @IsNotEmpty()
   @IsEnum(InvestmentAmount)
   amount: InvestmentAmount = InvestmentAmount.Starter;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: String,
+    description:
+      'Required property. It has to be one of the existing advisor_id.',
+  })
   @IsNotEmpty()
   @IsString()
   advisor_id!: string;
