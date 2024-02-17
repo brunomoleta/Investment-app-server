@@ -29,7 +29,7 @@ export class Admin {
     description: 'Readonly property',
   })
   @Exclude()
-  readonly access_type: string;
+  access_type: string;
 
   constructor() {
     this.id = randomUUID();
