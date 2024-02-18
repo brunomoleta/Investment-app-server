@@ -1,6 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import {
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -8,6 +9,7 @@ import {
 import { SessionService } from './session.service';
 import { StartSessionDto } from './dto/start-session.dto';
 import { UserRole } from '../../decorators/roles.decorator';
+import { SessionResponseDto } from './dto/session-response.dto';
 
 @ApiTags('login')
 @Controller('session')
@@ -15,8 +17,8 @@ export class SessionController {
   constructor(private readonly sessionService: SessionService) {}
 
   @Post('/admin')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
+    type: SessionResponseDto,
     description: 'Admin is logged in.',
   })
   @ApiNotFoundResponse({
@@ -30,8 +32,8 @@ export class SessionController {
   }
 
   @Post('/advisor')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
+    type: SessionResponseDto,
     description: 'Advisor is logged in.',
   })
   @ApiNotFoundResponse({
@@ -49,7 +51,7 @@ export class SessionController {
 
   @Post('/investor')
   @ApiResponse({
-    status: 200,
+    type: SessionResponseDto,
     description: 'Investor is logged in.',
   })
   @ApiNotFoundResponse({

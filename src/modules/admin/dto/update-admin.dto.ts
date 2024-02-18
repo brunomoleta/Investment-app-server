@@ -1,41 +1,41 @@
-import { ApiProperty } from '@nestjs/swagger';
-
+import { CreateAdminDto } from './create-admin.dto';
 import {
   IsEmail,
   IsNotEmpty,
-  MinLength,
-  MaxLength,
   IsString,
   Matches,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { hashSync } from 'bcryptjs';
 
-export class CreateAdminDto {
+export class UpdateAdminDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(4)
   @MaxLength(64)
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
-    description: 'Required property',
+    description: 'Optional property',
   })
-  name: string;
+  name?: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(9)
   @MaxLength(64)
   @IsEmail()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
-    description: 'Required property',
+    description: 'Optional property',
   })
-  email!: string;
+  email?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
-    description: 'Required property',
+    description: 'Optional property',
   })
   @IsString()
   @IsNotEmpty()
@@ -56,5 +56,5 @@ export class CreateAdminDto {
   @Transform(({ value }: { value: string }) => hashSync(value), {
     groups: ['transform'],
   })
-  password!: string;
+  password?: string;
 }

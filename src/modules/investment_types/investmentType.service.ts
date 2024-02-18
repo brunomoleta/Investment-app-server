@@ -124,6 +124,23 @@ export class InvestmentTypeService {
   async findById(id: string) {
     const investment_type = await this.prisma.investmentType.findUnique({
       where: { id },
+      select: {
+        id: true,
+        type_name: true,
+        risk: true,
+
+        advisors: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            phone_number: true,
+            experience: true,
+            created_at: true,
+          },
+        },
+      },
     });
 
     if (!investment_type)

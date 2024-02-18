@@ -1,11 +1,11 @@
-import { CreateAdminDto } from '../../admin/dto/create-admin.dto';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString, Length } from 'class-validator';
+import { UpdateAdminDto } from '../../admin/dto/update-admin.dto';
 
-export class CreateUserDto extends CreateAdminDto {
-  @ApiProperty({
+export class UpdateUserDto extends UpdateAdminDto {
+  @ApiPropertyOptional({
     type: String,
-    description: 'Required property',
+    description: 'Optional property',
   })
   @IsString()
   @Length(11, 11)
