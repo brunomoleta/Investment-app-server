@@ -9,7 +9,7 @@
     "build": "nest build -- -b swc",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "postinstall": "npx prisma generate && npm run build",
+    "postinstall": "npx prisma generate && yarn build",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
