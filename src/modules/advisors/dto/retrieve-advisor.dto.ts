@@ -14,7 +14,7 @@ export class RetrieveAdvisorDto extends CreateAdvisorDto {
   @ApiProperty({
     type: Investor,
     isArray: true,
-    description: "Investor's with this advisor's id.",
+    description: "Investor's with connected with this advisor's id.",
   })
   investors: Investor[];
 }

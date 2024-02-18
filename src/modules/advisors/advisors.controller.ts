@@ -23,8 +23,8 @@ import {
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UpdatePasswordDto } from '../user/dto/update-password.dto';
 import { Advisor } from './entities/advisor.entity';
@@ -52,9 +52,13 @@ export class AdvisorsController {
   }
 
   @Get('all')
-  @ApiResponse({
-    status: 200,
-    description: 'Get advisors with all the info.',
+  @ApiOkResponse({
+    isArray: true,
+    type: RetrieveAdvisorDto,
+    description: 'Admins get advisors with all the info.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Only admins can access this route',
   })
   @UseGuards(JwtGuard)
   findAllAdminOnly(@Req() request: Request): Promise<RetrieveAdvisors> {
@@ -62,18 +66,24 @@ export class AdvisorsController {
   }
 
   @Get()
-  @ApiResponse({
-    status: 200,
-    description: 'Get advisors',
+  @ApiOkResponse({
+    isArray: true,
+    type: Advisor,
+    description: 'Get advisors without authentication',
   })
   findAllNoAuth(@Req() request: Request): Promise<RetrieveAdvisors> {
     return this.advisorsService.findAllNoAuth(request);
   }
 
   @Get('speciality_id/:speciality_id')
-  @ApiResponse({
-    status: 200,
-    description: 'Filter advisors through their speciality.',
+  @ApiOkResponse({
+    isArray: true,
+    type: Advisor,
+    description:
+      'Get advisors filtered by their speciality, without authentication',
+  })
+  @ApiNotFoundResponse({
+    description: 'Please set a valid speciality_id',
   })
   filterPerSpecialityId(
     @Req() request: Request,
@@ -83,9 +93,15 @@ export class AdvisorsController {
   }
 
   @Get('experience/:experience')
-  @ApiResponse({
-    status: 200,
-    description: 'Filter advisors through their experience level.',
+  @ApiOkResponse({
+    isArray: true,
+    type: Advisor,
+    description:
+      'Get advisors filtered by their experience level, without authentication',
+  })
+  @ApiNotFoundResponse({
+    description:
+      'Please set a valid experience. Either beginner, intermediate, advanced, expert',
   })
   filterPerExperience(
     @Req() request: Request,
@@ -99,6 +115,9 @@ export class AdvisorsController {
     type: RetrieveAdvisorDto,
     isArray: false,
     description: 'Retrieve an advisor through the token',
+  })
+  @ApiUnauthorizedResponse({
+    description: "It's necessary to set a valid token to retrieve the advisor",
   })
   @UseGuards(JwtGuard)
   findById(@Request() request: any) {
@@ -115,6 +134,10 @@ export class AdvisorsController {
   @ApiBadRequestResponse({
     description:
       'New password has to use guidelines specified at update-password.dto',
+  })
+  @ApiUnauthorizedResponse({
+    description:
+      "It's necessary to set a valid token to update the advisor's password.",
   })
   @ApiConflictResponse({
     description: 'Conflict. Invalid password.',
@@ -135,9 +158,12 @@ export class AdvisorsController {
 
   @Patch()
   @UseGuards(JwtGuard)
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Update an advisor data through the token',
+  })
+  @ApiUnauthorizedResponse({
+    description:
+      "It's necessary to set a valid token to update the advisor's password.",
   })
   update(@Request() request: any, @Body() updateAdvisorDto: UpdateAdvisorDto) {
     const token = request.headers.authorization.split(' ')[1];
@@ -153,6 +179,10 @@ export class AdvisorsController {
   })
   @ApiNotFoundResponse({
     description: 'Not Found',
+  })
+  @ApiUnauthorizedResponse({
+    description:
+      "It's necessary to set a valid token to update the advisor's password.",
   })
   remove(@Request() request: any) {
     const token = request.headers.authorization.split(' ')[1];

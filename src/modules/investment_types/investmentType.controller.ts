@@ -15,7 +15,18 @@ import { JwtGuard } from '../session/jwt.guard';
 import { InvestmentTypeService } from './investmentType.service';
 import { CreateInvestmentTypeDto, Risk } from './dto/create-investmentType.dto';
 import { UpdateInvestmentTypeDto } from './dto/update-investmentType.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { InvestmentType } from './entities/investmentType.entity';
+import { RetrieveAllInvestmentTypesDto } from './dto/get-all-investmentType.dto';
+import { RetrieveInvestmentTypeDto } from './dto/retrieve-investmentType.dto';
 
 @Controller('investment_type')
 @ApiTags('investment_type')
@@ -23,9 +34,13 @@ export class InvestmentTypeController {
   constructor(private readonly investmentTypeService: InvestmentTypeService) {}
 
   @Post()
-  @ApiResponse({
-    status: 200,
-    description: 'Create investment type.',
+  @ApiCreatedResponse({
+    type: InvestmentType,
+    description: 'Successfully created an investment type.',
+  })
+  @ApiUnauthorizedResponse({
+    description:
+      "It's necessary to set a valid token to create an investment type.",
   })
   @UseGuards(JwtGuard)
   create(@Body() createInvestmentTypeDto: CreateInvestmentTypeDto) {
@@ -33,10 +48,15 @@ export class InvestmentTypeController {
   }
 
   @Get('all')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
+    type: RetrieveAllInvestmentTypesDto,
+    isArray: true,
     description:
       'List investment types with full information available only for authenticated users',
+  })
+  @ApiUnauthorizedResponse({
+    description:
+      "It's necessary to insert a admin token to list all investment types.",
   })
   @UseGuards(JwtGuard)
   findAllAdminOnly(@Req() request: Request) {
@@ -44,8 +64,9 @@ export class InvestmentTypeController {
   }
 
   @Get()
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
+    isArray: true,
+    type: InvestmentType,
     description: 'List investment types accessible to all users.',
   })
   findAll(@Req() request: Request) {
@@ -53,8 +74,9 @@ export class InvestmentTypeController {
   }
 
   @Get('risk/:risk')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
+    type: InvestmentType,
+    isArray: true,
     description: 'Filter investment types through their risk level.',
   })
   filteredByRisk(@Req() request: Request, @Param('risk') risk: Risk) {
@@ -62,18 +84,27 @@ export class InvestmentTypeController {
   }
 
   @Get('id/:id')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Retrieve investment type through its id.',
+    type: RetrieveInvestmentTypeDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Investment type id not found',
   })
   findById(@Param('id') id: string) {
     return this.investmentTypeService.findById(id);
   }
 
-  @Patch(':id')
-  @ApiResponse({
-    status: 200,
+  @Patch('id/:id')
+  @ApiOkResponse({
+    type: InvestmentType,
     description: 'Update investment type through its id.',
+  })
+  @ApiNotFoundResponse({
+    description: 'investment type id sent was not found',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'This user is not allowed to perform this action.',
   })
   @UseGuards(JwtGuard)
   update(
@@ -83,12 +114,16 @@ export class InvestmentTypeController {
     return this.investmentTypeService.update(id, updateInvestmentTypeDto);
   }
 
-  @HttpCode(204)
-  @ApiResponse({
-    status: 200,
+  @ApiNoContentResponse({
     description: 'Remove investment type through its id.',
   })
-  @Delete(':id')
+  @ApiNotFoundResponse({
+    description: 'investment type id sent was not found',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'This user is not allowed to perform this action.',
+  })
+  @Delete('id/:id')
   @UseGuards(JwtGuard)
   remove(@Param('id') id: string) {
     return this.investmentTypeService.remove(id);

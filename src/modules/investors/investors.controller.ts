@@ -16,15 +16,18 @@ import { decode } from 'jsonwebtoken';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
+  ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UpdatePasswordDto } from '../user/dto/update-password.dto';
 import { UpdateInvestorDto } from './dto/update-investor.dto';
 import { Investor } from './entities/investor.entity';
+import { RetrieveInvestorDto } from './dto/retrieve-investor.dto';
 
 @ApiTags('investor')
 @Controller('investor')
@@ -32,8 +35,7 @@ export class InvestorsController {
   constructor(private readonly investorsService: InvestorsService) {}
 
   @Post()
-  @ApiResponse({
-    status: 200,
+  @ApiCreatedResponse({
     description: 'Investor created successfully.',
     isArray: false,
     type: Investor,
@@ -43,8 +45,9 @@ export class InvestorsController {
   }
 
   @Get()
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
+    isArray: true,
+    type: Investor,
     description: 'List investors',
   })
   @UseGuards(JwtGuard)
@@ -53,9 +56,17 @@ export class InvestorsController {
   }
 
   @Get('advisor/:advisor_id')
-  @ApiResponse({
-    status: 200,
-    description: 'Filter investors through a advisor_id.',
+  @UseGuards(JwtGuard)
+  @ApiOkResponse({
+    type: Investor,
+    isArray: true,
+    description: 'Filter investors through an advisor_id.',
+  })
+  @ApiNotFoundResponse({
+    description: 'advisor_id sent was not found',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'This user is not allowed to perform this action.',
   })
   @UseGuards(JwtGuard)
   filterPerAdvisorId(@Param('advisor_id') advisor_id: string) {
@@ -63,8 +74,9 @@ export class InvestorsController {
   }
 
   @Get('amount/:amount')
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
+    type: Investor,
+    isArray: true,
     description: 'Filter investors through their investment amount.',
   })
   @UseGuards(JwtGuard)
@@ -74,8 +86,12 @@ export class InvestorsController {
 
   @Get('id')
   @ApiResponse({
-    status: 200,
-    description: 'Remove specific investor through the token',
+    isArray: false,
+    type: RetrieveInvestorDto,
+    description: 'Retrieve an investor through the token',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'This user is not allowed to perform this action.',
   })
   @UseGuards(JwtGuard)
   findById(@Request() request: any) {
@@ -86,9 +102,16 @@ export class InvestorsController {
   }
 
   @Patch()
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
+    type: UpdateInvestorDto,
     description: 'Update specific investor through the token',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'This user is not allowed to perform this action.',
+  })
+  @ApiBadRequestResponse({
+    description:
+      'Please check the allowed data that can be sent to update the investor',
   })
   @UseGuards(JwtGuard)
   update(
