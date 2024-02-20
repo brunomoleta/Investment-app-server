@@ -39,7 +39,6 @@ export class AdminsController {
   @ApiConflictResponse({
     description: 'This email already exists',
   })
-  @UseGuards(JwtGuard)
   create(@Body() createAdminDto: CreateAdminDto) {
     return this.adminsService.create(createAdminDto);
   }
