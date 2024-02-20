@@ -18,9 +18,9 @@ async function bootstrap() {
   app.useGlobalInterceptors(new PaginationInterceptor());
 
   const ngrokPattern = /https:\/\/[a-zA-Z0-9-]+\.ngrok-free\.app(.*)/;
-  const localUrl: string = 'localhost:3000';
-  const deploy = 'https://easybank-investments.vercel.app/';
-  const production = 'https://investment-app-client-brunomoleta.vercel.app/';
+  const localUrl: string = 'http://localhost:3000';
+  const deploy: RegExp = /.easybank-investments.vercel.app.*/;
+  const production: RegExp = /.investment-app-client-brunomoleta.vercel.app.*/;
   const acceptedValuesArray = [localUrl, ngrokPattern, production, deploy];
 
   const corsOptions = {
