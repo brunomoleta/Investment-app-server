@@ -30,7 +30,7 @@ model Advisor {
   experience    String
   speciality_id String
   access_type   String
-  bio   String
+  bio           String
 
   investors  Investor[]
   speciality InvestmentType? @relation(fields: [speciality_id], references: [id])

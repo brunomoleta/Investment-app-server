@@ -9,6 +9,10 @@ vincula investidores com assessores de investimento.
 
 Bruno Moleta Santos
 
+## Relacionamentos
+
+<img style="margin-block-start: 2rem" alt="relationships table" title="tabela de relacionamentos" src="relationships.jpeg"/>
+
 ## Versão
 
 1.0.0
@@ -20,7 +24,7 @@ Bruno Moleta Santos
   <img src="https://nestjs.com/img/logo_text.svg" height="50" alt="NestJS" style="margin-right: 10px;">
   <img src="https://cdn-icons-png.flaticon.com/512/919/919832.png" height="50" alt="Typescript" style="margin-right: 10px;">
   <img src="https://www.postgresql.org/media/img/about/press/elephant.png" height="50" alt="PostgreSQL" style="margin-right: 10px;">
-  <img src="https://cdn.icon-icons.com/icons2/2148/PNG/512/prisma_icon_132076.png" height="50" alt="Prisma" style="margin-right: 10px;">
+  <img title="prisma" src="https://cdn.icon-icons.com/icons2/2148/PNG/512/prisma_icon_132076.png" height="50" alt="Prisma" style="margin-right: 10px;">
 
 </div>
 
@@ -199,6 +203,10 @@ Abaixo o detalhamento da estrutura:
 
 ## Endpoints
 
+A documentação completa encontra-se em [deploy-swagger](https://investment-fullstack.onrender.com/doc)(deploy)
+ou [local-swagger](http://localhost:3001/doc)(se rodando localmente).
+
+
 | `Método`   | `Endpoint`                            | `Responsabilidade`                                   | `Autenticação`        |
 |------------|---------------------------------------|------------------------------------------------------|-----------------------|
 | POST       | /session/admin                        | Gera o token de autenticação de admin                | Acesso universal      |
@@ -237,15 +245,11 @@ Abaixo o detalhamento da estrutura:
 | PATCH      | /admin/password                       | Valida a senha atual e substitui por uma nova        | Usuário autenticado   |
 | DELETE     | /admin                                | Remove administrador                                 | Usuário autenticado   |
 
-Para mais informações, consulte a documentação disponível
-em [local-swagger](http://localhost:3001/doc)(se rodando localmente) ou
-em [deployed-swagger](https://easy-contacts-svuu.onrender.com/doc)(deploy).
-
 ## Deploy
 
-Para testar a aplicação em produção, esta está disponível
-em [investing-back-end](https://investment-fullstack.onrender.com).
+Para testar a aplicação em produção, utilize: [investing-back-end](https://investment-fullstack.onrender.com).
 
 ## Contato
 
 Para questionamentos ou sugestões, entre em contato através do email: brunomoleta@pm.me.
+Será um prazer respondê-lo.
