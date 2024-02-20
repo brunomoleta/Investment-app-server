@@ -19,12 +19,13 @@ async function bootstrap() {
 
   const ngrokPattern = /https:\/\/[a-zA-Z0-9-]+\.ngrok-free\.app(.*)/;
   const localUrl: string = 'localhost:3000';
-  const deploy = 'https://easybank-investments.vercel.app/';
-  const production = 'https://investment-app-client-brunomoleta.vercel.app/';
+  const deploy: string = 'https://easybank-investments.vercel.app';
+  const production: string =
+    'https://investment-app-client-brunomoleta.vercel.app';
   const acceptedValuesArray = [localUrl, ngrokPattern, production, deploy];
 
   const corsOptions = {
-    origin: acceptedValuesArray,
+    origin: deploy,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     optionsSuccessStatus: 204,
