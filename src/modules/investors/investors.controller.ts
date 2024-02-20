@@ -126,6 +126,7 @@ export class InvestorsController {
 
   @Patch('password')
   @ApiOkResponse({
+    type: Investor,
     description: "Update investor's password after validating his current one.",
   })
   @ApiBadRequestResponse({
