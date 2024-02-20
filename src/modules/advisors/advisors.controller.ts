@@ -159,6 +159,7 @@ export class AdvisorsController {
   @Patch()
   @UseGuards(JwtGuard)
   @ApiOkResponse({
+    type: Advisor,
     description: 'Update an advisor data through the token',
   })
   @ApiUnauthorizedResponse({
