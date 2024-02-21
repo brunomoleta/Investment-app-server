@@ -1,46 +1,135 @@
 # Backend for a Fullstack project
 
-## Descrição
+## Description
 
-Backend em NestJS utilizando Prisma e Postgresql para uma aplicação que
-vincula investidores com assessores de investimento.
+Backend of a fullstack app that connects investors and investment advisors.
+The goal of this project was to make my first fullstack app using Nest.js.
 
-## Autor
+## Table of contents
 
-Bruno Moleta Santos
+- [Overview](#overview)
+    - [Built with](#build-with)
+    - [Deploy links](#deploy-links)
+    - [Relationships](#relationships)
+- [Project Structure](#project-structure)
+    - [Architecture](#architecture)
+    - [Scripts](#scripts)
+    - [Dependencies](#dependencies)
+    - [Dev dependencies](#dev-dependencies)
+    - [Installation](#installation)
+        - [Local settings](#local-settings)
+        - [Database config](#database-config)
+    - [Endpoints](#endpoints)
+- [The process](#the-process)
+    - [What I learned](#what-i-learned)
+    - [Continued development](#continued-development)
+    - [Useful resources](#useful-resources)
+- [Acknowledgments](#acknowledgments)
+    - [Author](#author)
 
-## Relacionamentos
+## Overview
 
-<img style="margin-block-start: 2rem" alt="relationships table" title="tabela de relacionamentos" src="relationships.jpeg"/>
+### Build with
 
-## Versão
+- Node.js
+- Nest
+- Typescript
+- PostgreSQL
+- Prisma ORM
 
-1.0.0
+### Deploy links
 
-## Tecnologias Utilizadas
+- [Documentation](https://investment-fullstack.onrender.com/doc)
+- [Live Backend](https://investment-fullstack.onrender.com/)
 
-<div style="display: flex;">
-  <img src="https://nodejs.org/static/images/logos/nodejs-new-pantone-black.svg" height="50" alt="Node.js" style="margin-right: 20px;">
-  <img src="https://nestjs.com/img/logo_text.svg" height="50" alt="NestJS" style="margin-right: 10px;">
-  <img src="https://cdn-icons-png.flaticon.com/512/919/919832.png" height="50" alt="Typescript" style="margin-right: 10px;">
-  <img src="https://www.postgresql.org/media/img/about/press/elephant.png" height="50" alt="PostgreSQL" style="margin-right: 10px;">
-  <img title="prisma" src="https://cdn.icon-icons.com/icons2/2148/PNG/512/prisma_icon_132076.png" height="50" alt="Prisma" style="margin-right: 10px;">
+### Relationships
 
-</div>
+![](relationships.jpeg)
 
-## Scripts
+## Project Structure
 
-- `build`: Compilação do projeto Nest.js.
-- `format`: Formatação do código usando Prettier.
-- `start`: Inicia o servidor Nest.js.
-- `start:dev`: Inicia o servidor em modo de desenvolvimento com monitoramento de alterações.
-- `start:debug`: Inicia o servidor em modo de depuração com monitoramento de alterações.
-- `start:prod`: Inicia o servidor em modo de produção.
-- `lint`: Executa o ESLint para linting e correção automática.
+### Architecture
 
-Execute os scripts utilizando `npm run` ou `yarn run`.
+```
+investing-app-client/
+│
+├── node_modules/         Dependencies installed in your local environment.
+│
+├── prisma/               Contains Prisma migrations and Prisma models
+│
+├── src/                Source code
+|   |
+│   ├── database/       Contains the connection between Prisma and Nest;
+|   |
+│   ├── decorators/     Functions that may be used throughout the code;
+|   |          
+│   ├── interceptor/    Has a pagination function;
+|   |          
+│   ├── modules/        Classes that stablish the main ingredients of the API;
+|     |
+│     ├── admin/        The admin module has access to everything;
+|       | 
+                        (The description below is equivalent for the
+                        following modules);
+|       | 
+│       ├── dto         Defines the data the API will receive   
+                        and transfers it between controller and service;  
+|       | 
+│       ├── entity      The class that maps to the database;   
+|       | 
+│       ├── controller  Defines the type of route and what 
+                        it will receive from the client.
+                        Also the place where the Swagger
+                        documentation is customized;                   
+|       | 
+│       ├── service     Defines how the API will handle the client's request
+                        and interacts with the database;   
+|       | 
+│       ├── module      Handles controllers, providers and exports;   
+|       |
+|     |
+│     ├── advisors/     Each is connected to N investor and, with
+                        one investment type;      
+|     | 
+│     ├── investment_types/   
+|     |                 Each one is connect to an advisor,
+                        and to N products;
+|     | 
+│     ├── investors/    The main user of the app. 
+|     |                 Will connect to N products,
+                        and one advisor;
+                        
+|     | 
+│     ├── products/     (Not implemented yet)
+|     |                 Connects with N investors, and
+                        N investment_types;
+|     | 
+│     ├── session/      Starts the user's session
+|     |                 
+|     | 
+│     ├── users/        Sets default values
+|     |                 that the other modules  
+                        will extend;
+|                    
+│   .env.example          example of how to write a .env
+|
+│   relationships.jpeg    visualization of the relationships between the modules 
+│   └── ...
+```
 
-## Dependências
+### Scripts
+
+- `build`: Compile Nest.js;
+- `format`: Format the source code with Prettier;
+- `start`: Start the Nest.js server;
+- `start:dev`: Start the server in dev mode monitoring updates;
+- `start:debug`: Start the server in debug mode monitoring updates;
+- `start:prod`: Start server to test the deployment of the source code;
+- `lint`: Runs ESLint for linting and automatic correction;
+
+Run the scripts starting with `npm run` or `yarn`,
+
+### Dependencies
 
 - @nestjs/common: ^10.0.0,
 - @nestjs/core: ^10.0.0,
@@ -66,7 +155,7 @@ Execute os scripts utilizando `npm run` ou `yarn run`.
 - rxjs: ^7.8.1,
 - swagger-ui-express: ^5.0.0
 
-## Dependências de Desenvolvimento
+### Dev dependencies
 
 - @nestjs/cli: ^10.0.0,
 - @nestjs/schematics: ^10.0.0,
@@ -95,36 +184,36 @@ Execute os scripts utilizando `npm run` ou `yarn run`.
 - tsconfig-paths: ^4.2.0,
 - typescript: ^5.1."
 
-## Instalação
+### Installation
 
-1. Clone o repositório:
+1. Clone the repositório:
 
 ```bash
-git clone git@github.com:brunomoleta/Investment-app-client.git
+git clone git@github.com:brunomoleta/Investment-app-server.git
 ```
 
-2. Instale as dependências:
+2. Install the project's dependencies:
 
 ```bash
 yarn install
 ```
 
-## Configuração do Ambiente
+#### Local settings
 
-Certifique-se de configurar as variáveis de ambiente necessárias no arquivo `.env`, usando com base o `.env.example`,
-localizado na raiz do projeto.
+Make sure you set the environment variables in the `.env` file, using `.env.example`,
+located at the project's root.
 
-## Configuração do Banco de Dados
+#### Database config
 
-1. Instalação do PostgreSQL
+1. Install PostgreSQL
 
-Certifique-se de ter o PostgreSQL instalado em seu sistema. Você pode baixá-lo
-em [https://www.postgresql.org/download/](https://www.postgresql.org/download/).
+Make sure you have PostgreSQL installed on your system. You can download it
+at [postgresql](https://www.postgresql.org/download/).
 
-2. Inicialização do Serviço
+2. Start the server
 
-Após a instalação, inicie o serviço do PostgreSQL. Os comandos podem variar de acordo com o sistema operacional, mas
-geralmente incluem:
+After installing, start the PostgreSQL service.
+The commands change depending on the operating system:
 
 - **Linux:**
 
@@ -134,8 +223,8 @@ sudo service postgresql start
 
 - **Windows:**
 
-Vá para o "Painel de Controle" > "Ferramentas Administrativas" > "Serviços".
-Localize o serviço PostgreSQL e inicie-o.
+Go to  "Control panel" > "Admin Tools" > "Services".
+Find the PostgreSQL service and start it.
 
 - **MacOS:**
 
@@ -143,29 +232,29 @@ Localize o serviço PostgreSQL e inicie-o.
 pg_ctl -D /usr/local/var/postgres start
 ```
 
-3. Acesso ao Banco de Dados
+3. Enter the Database
 
-Por padrão, o PostgreSQL cria um banco de dados chamado postgres. Você pode acessá-lo usando o utilitário psql no
+By default, PostgreSQL creates a database named ````postgres````. You can access it using the word ````psql```` at the
 terminal:
 
 ```bash
 psql -U postgres
 ```
 
-Isso abrirá uma sessão interativa com o banco de dados postgres usando o usuário postgres. Você pode ser solicitado a
-fornecer a senha.
+This will open an interactive session with the postgres database using your postgres user.
+You will have to put your password without seeing it.
 
-4. Criar um Novo Banco de Dados
+4. Create a new Database
 
-Dentro do shell psql, execute o seguinte comando para criar um novo banco de dados:
+Inside the psql shell, run the following command to create a new database:
 
 ```bash
-CREATE DATABASE nome_do_banco_de_dados;
+CREATE DATABASE db_name;
 ```
 
-Substitua `nome_do_banco_de_dados` pelo nome desejado para o seu banco de dados.
+Change `db_name` with the desired name for the database.
 
-5. Execute as migrações do Prisma
+5. Run the prisma migrations
 
 ```bash
 prisma migrate dev
@@ -173,7 +262,7 @@ prisma migrate dev
 
 ## Executando o Projeto
 
-Execute o seguinte comando para iniciar o servidor:
+Run the following command to start the server:
 
 ```bash
 # development
@@ -186,70 +275,147 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
-O servidor local estará acessível em [http://localhost:3001](http://localhost:3000).
-Observação: A porta poderá ser diferente caso tenha configurado de outra forma no `.env`.
+Local server running at: [http://localhost:3001](http://localhost:3000).
 
-## Estrutura do Projeto
+PS: The port may be diffent if you changed the config at `.env`.
 
-A estrutura foi toda baseada em NestJS e desenvolvida com TypeScript e elementos de Programação Orientada a Objetos.
-Abaixo o detalhamento da estrutura:
+### Endpoints
 
-- `module`: tem a função de organizar e encapsular componentes relacionados, como controllers, services e providers.
-- `service`: responsável por executar interagir com o banco de dados e fornecer funcionalidades específicas para os
-  controllers ou outros services.
-- `controller`: responsável por lidar com a entrada de solicitações do cliente, como GET, POST, PATCH e DELETE.
-- `entity`: refere-se ao modelo de dados que representa as tabelas do banco de dados.
-- `dto`: tem como objetivo transferir dados entre os controllers e os services.
+The full doc is at [deploy-swagger](https://investment-fullstack.onrender.com/doc)(deploy)
+or [local-swagger](http://localhost:3001/doc)(running locally).
 
-## Endpoints
+| `Method`   | `Endpoint`                            | `Responsability`                                 | `Autenticação`        |
+|------------|---------------------------------------|--------------------------------------------------|-----------------------|
+| POST       | /session/admin                        | Generate admin authentication token              | Universal Access      |
+| POST       | /session/advisor                      | Generate advisor authentication token            | Universal Access      |
+| POST       | /session/investor                     | Generate investor authentication token           | Universal Access      |
+| ---------- | -------------------------------       | --------------------------------------------     | --------------------- |
+| POST       | /investor                             | Creates an investor                              | Universal Access      |
+| GET        | /investor                             | Retrievess investors                             | Authenticated User    |
+| GET        | /investor/id                          | Retrievess investor by Token                     | Authenticated User    |
+| GET        | /investor/advisor/:advisor_id         | Filters investors by advisor                     | Authenticated User    |
+| GET        | /investor/amount/:amount              | Filters investors by amount($)                   | Authenticated User    |
+| PATCH      | /investor                             | Updates investor's data by the Token             | Authenticated User    |
+| PATCH      | /investor/password                    | Validates current password and update it         | Authenticated User    |
+| DELETE     | /investor                             | Deletes investor by the Token                    | Authenticated User    |
+| ---------- | -------------------------------       | --------------------------------------------     | --------------------- |
+| POST       | /advisor                              | Creates an advisor                               | Universal Access      |
+| GET        | /advisor                              | Retrieves advisors                               | Universal Access      |
+| GET        | /advisor/all                          | Retrieves advisors with all their data           | Authenticated User    |
+| GET        | /advisor/speciality_id/:speciality_id | Filter advisors through speciality_id            | Universal Access      |
+| GET        | /advisor/experience/:experience       | Filter advisors through experience               | Universal Access      |
+| GET        | /advisor/id                           | Retrieves advisor through the token              | Authenticated User    |
+| PATCH      | /advisor                              | Updates an advisor through the token             | Authenticated User    |
+| PATCH      | /advisor/password                     | Validates current password and update it         | Authenticated User    |
+| DELETE     | /advisor                              | Deletes an advisor through the token             | Authenticated User    |
+| ---------- | -------------------------------       | --------------------------------------------     | --------------------- |
+| POST       | /investment_type                      | Creates an investment type                       | Authenticated User    |
+| GET        | /investment_type/all                  | Retrieves investment types with all related data | Authenticated User    |
+| GET        | /investment_type                      | Retrieves investment types                       | Universal Access      |
+| GET        | /investment_type/risk/:risk           | Filter investment types by their risk            | Universal Access      |
+| GET        | /investment_type/id/:id               | Retrieves investment_type through their id       | Universal Access      |
+| PATCH      | /investment_type                      | Update investment_type through their id          | Authenticated User    |
+| ---------- | -------------------------------       | --------------------------------------------     | --------------------- |
+| POST       | /admin                                | Create admin                                     | Authenticated User    |
+| GET        | /admin                                | Retrieves admins                                 | Authenticated User    |
+| GET        | /admin/id                             | Retrieves admin through the Token                | Authenticated User    |
+| PATCH      | /admin/password                       | Validate current password and update it          | Authenticated User    |
+| DELETE     | /admin                                | Remove admin                                     | Authenticated User    |
 
-A documentação completa encontra-se em [deploy-swagger](https://investment-fullstack.onrender.com/doc)(deploy)
-ou [local-swagger](http://localhost:3001/doc)(se rodando localmente).
+## The process
 
+### What I learned
 
-| `Método`   | `Endpoint`                            | `Responsabilidade`                                   | `Autenticação`        |
-|------------|---------------------------------------|------------------------------------------------------|-----------------------|
-| POST       | /session/admin                        | Gera o token de autenticação de admin                | Acesso universal      |
-| POST       | /session/advisor                      | Gera o token de autenticação de assessor             | Acesso universal      |
-| POST       | /session/investor                     | Gera o token de autenticação de investidor           | Acesso universal      |
-| ---------- | -------------------------------       | --------------------------------------------         | --------------------- |
-| POST       | /investor                             | Cadastro de investidor                               | Acesso universal      |
-| GET        | /investor                             | Lista todos os investidores                          | Usuário autenticado   |
-| GET        | /investor/id                          | Lista investidor por Token                           | Usuário autenticado   |
-| GET        | /investor/advisor/:advisor_id         | Filtra investidores por assessor                     | Usuário autenticado   |
-| GET        | /investor/amount/:amount              | Filtra investidores por capital($)                   | Usuário autenticado   |
-| PATCH      | /investor                             | Altera dados do investidor pelo Token                | Usuário autenticado   |
-| PATCH      | /investor/password                    | Valida a senha atual e substitui por uma nova        | Usuário autenticado   |
-| DELETE     | /investor                             | Exclui investidor pelo Token                         | Usuário autenticado   |
-| ---------- | -------------------------------       | --------------------------------------------         | --------------------- |
-| POST       | /advisor                              | Cria um assessor                                     | Acesso universal      |
-| GET        | /advisor                              | Lista assessores                                     | Acesso universal      |
-| GET        | /advisor/all                          | Lista assessores com mais informações                | Usuário autenticado   |
-| GET        | /advisor/speciality_id/:speciality_id | Filtra assessores através do Id da especialidade     | Acesso universal      |
-| GET        | /advisor/experience/:experience       | Filtra assessores através da experiência             | Acesso universal      |
-| GET        | /advisor/id                           | Lista assessor através do token                      | Usuário autenticado   |
-| PATCH      | /advisor                              | Atualiza assessor através do token                   | Usuário autenticado   |
-| PATCH      | /advisor/password                     | Valida a senha atual e substitui por uma nova        | Usuário autenticado   |
-| DELETE     | /advisor                              | Remove assesor através do token                      | Usuário autenticado   |
-| ---------- | -------------------------------       | --------------------------------------------         | --------------------- |
-| POST       | /investment_type                      | Cria categoria de investimento                       | Usuário autenticado   |
-| GET        | /investment_type/all                  | Lista categorias de investimento com info completa   | Usuário autenticado   |
-| GET        | /investment_type                      | Lista categorias de investimento                     | Acesso universal      |
-| GET        | /investment_type/risk/:risk           | Filtra categorias de investimento por nível de risco | Acesso universal      |
-| GET        | /investment_type/id/:id               | Lista categoria de investimento através de id        | Acesso universal      |
-| PATCH      | /investment_type                      | Altera categoria de investimento                     | Usuário autenticado   |
-| ---------- | -------------------------------       | --------------------------------------------         | --------------------- |
-| POST       | /admin                                | Cria administrador                                   | Usuário autenticado   |
-| GET        | /admin                                | Lista administradores                                | Usuário autenticado   |
-| GET        | /admin/id                             | Lista admin através do Token                         | Usuário autenticado   |
-| PATCH      | /admin/password                       | Valida a senha atual e substitui por uma nova        | Usuário autenticado   |
-| DELETE     | /admin                                | Remove administrador                                 | Usuário autenticado   |
+To enhance the logged user security I decided to retrieve only the id at the payload.
+It was the first time I tried it, so it was not straightforward.
+I came up with the following:
 
-## Deploy
+```ts
+//session.service.ts
+const { id } = user;
+const token = { sub: id };
 
-Para testar a aplicação em produção, utilize: [investing-back-end](https://investment-fullstack.onrender.com).
+return { token: await this.jwtService.signAsync(token) };
+```
 
-## Contato
+So, at the controller the client passes the token to make
+a request. Such as:
 
-Para questionamentos ou sugestões, entre em contato através do email: brunomoleta@pm.me.
-Será um prazer respondê-lo.
+```ts
+//advisor.controller.ts
+@Patch('password')
+//...
+changePassword(
+  @Request()
+request: string,
+@Body()
+updatePasswordDto: UpdatePasswordDto,
+)
+{
+  const token = request.headers.authorization.split(' ')[1];
+  const decoded: any = decode(token);
+
+  return await this.advisorsService.updatePassword(
+    decoded.sub,
+    updatePasswordDto,
+  );
+}
+```
+
+I also want to highlight the update of the password service.
+That was also the first time built:
+
+```ts
+    async
+updatePassword(
+  id
+:
+string, passwordDto
+:
+UpdatePasswordDto
+)
+{
+  const advisor =
+    await this.prisma.advisor.findUnique({
+      where: { id },
+    });
+//...
+
+  const passwordMatch = await bcrypt.compare(
+    passwordDto.currentPassword,
+    advisor.password,
+  );
+//...
+
+  const hashedPassword = await
+    bcrypt.hash(passwordDto.newPassword, 10);
+
+  await this.prisma.advisor.update({
+    where: { id },
+    data: { password: hashedPassword },
+  });
+
+  return { message: 'Password successfully updated' };
+}
+```
+
+### Continued development
+
+Make use of UseGuards, something I studied and tried to implement
+but could not finish it and automatize the pagination of GET requests
+that involve retrieving multiple instances.
+Also to experiment with MongoDB.
+
+### Useful resources
+
+- [How to make Nest and Swagger docs](https://www.slingacademy.com/article/how-to-automatically-generate-swagger-docs-in-nestjs/)
+- [Nest Offical doc](https://docs.nestjs.com/)
+
+## Acknowledgments
+
+### Author
+
+- Github - [Bruno Moleta](https://github.com/brunomoleta)
+- Frontend Mentor - [@brunomoleta](https://www.frontendmentor.io/profile/brunomoleta)
+- LinkedIn - [@brunomoleta](https://www.linkedin.com/in/bruno-moleta-santos/)
+- Email - brunomoleta@pm.me 
