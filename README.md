@@ -19,7 +19,8 @@ The goal of this project was to make my first fullstack app using Nest.js.
     - [Installation](#installation)
         - [Local settings](#local-settings)
         - [Database config](#database-config)
-    - [Endpoints](#endpoints)
+    - [Start server](#start-server)
+- [Endpoints](#endpoints)
 - [The process](#the-process)
     - [What I learned](#what-i-learned)
     - [Continued development](#continued-development)
@@ -131,58 +132,58 @@ Run the scripts starting with `npm run` or `yarn`,
 
 ### Dependencies
 
-- @nestjs/common: ^10.0.0,
-- @nestjs/core: ^10.0.0,
-- @nestjs/jwt: ^10.2.0,
-- @nestjs/passport: ^10.0.3,
-- @nestjs/platform-express: ^10.0.0,
-- @nestjs/swagger: ^7.2.0,
-- @prisma/client: ^5.9.0,
-- @types/multer: ^1.4.11,
-- bcryptjs: ^2.4.3,
-- class-transformer: ^0.5.1,
-- class-validator: ^0.14.1,
-- cloudinary: ^2.0.1,
-- cors: ^2.8.5,
-- dotenv: ^16.4.1,
-- jsonwebtoken: ^9.0.2,
-- multer: ^1.4.5-lts.1,
-- passport: ^0.7.0,
-- passport-jwt: ^4.0.1,
-- pg: ^8.11.3,
-- prisma: ^5.9.0,
-- reflect-metadata: ^0.1.13,
-- rxjs: ^7.8.1,
-- swagger-ui-express: ^5.0.0
+- ````@nestjs/common````: ^10.0.0,
+- ````@nestjs/core````: ^10.0.0,
+- ````@nestjs/jwt````: ^10.2.0,
+- ````@nestjs/passport````: ^10.0.3,
+- ````@nestjs/platform-express````: ^10.0.0,
+- ````@nestjs/swagger````: ^7.2.0,
+- ````@prisma/client````: ^5.9.0,
+- ````@types/multer````: ^1.4.11,
+- ````bcryptjs````: 2.4.3,
+- ````class-transformer````: 0.5.1,
+- ````class-validator````: 0.14.1,
+- ````cloudinary````: 2.0.1,
+- ````cors````: 2.8.5,
+- ````dotenv````: 16.4.1,
+- ````jsonwebtoken````: 9.0.2,
+- ````multer````: 1.4.5-lts.1,
+- ````passport````: 0.7.0,
+- ````passport-jwt````: 4.0.1,
+- ````pg````: 8.11.3,
+- ````prisma````: 5.9.0,
+- ````reflect-metadata````: 0.1.13,
+- ````rxjs````: 7.8.1,
+- ````swagger-ui-express````: 5.0.0
 
 ### Dev dependencies
 
-- @nestjs/cli: ^10.0.0,
-- @nestjs/schematics: ^10.0.0,
-- @nestjs/testing: ^10.0.0,
-- @swc/cli: ^0.1.65,
-- @swc/core: ^1.3.105,
-- @types/bcryptjs: ^2.4.6,
-- @types/express: ^4.17.17,
-- @types/jest: ^29.5.2,
-- @types/node: ^20.3.1,
-- @types/passport-jwt: ^4.0.1,
-- @types/supertest: ^6.0.0,
-- @typescript-eslint/eslint-plugin: ^6.0.0,
-- @typescript-eslint/parser: ^6.0.0,
-- eslint: ^8.42.0,
-- eslint-config-prettier: ^9.0.0,
-- eslint-plugin-prettier: ^5.0.0,
-- jest: ^29.5.0,
-- nodemon: ^3.0.3,
-- prettier: ^3.0.0,
-- source-map-support: ^0.5.21,
-- supertest: ^6.3.3,
-- ts-jest: ^29.1.0,
-- ts-loader: ^9.4.3,
-- ts-node: ^10.9.1,
-- tsconfig-paths: ^4.2.0,
-- typescript: ^5.1."
+- ````@nestjs/cli````: ^10.0.0,
+- ````@nestjs/schematics````: ^10.0.0,
+- ````@nestjs/testing````: ^10.0.0,
+- ````@swc/cli````: ^0.1.65,
+- ````@swc/core````: ^1.3.105,
+- ````@types/bcryptjs````: ^2.4.6,
+- ````@types/express````: ^4.17.17,
+- ````@types/jest````: ^29.5.2,
+- ````@types/node````: ^20.3.1,
+- ````@types/passport-jwt````: ^4.0.1,
+- ````@types/supertest````: ^6.0.0,
+- ````@typescript-eslint/eslint-plugin````: ^6.0.0,
+- ````@typescript-eslint/parser````: ^6.0.0,
+- ````eslint````: ^8.42.0,
+- ````eslint-config-prettier````: ^9.0.0,
+- ````eslint-plugin-prettier````: ^5.0.0,
+- ````jest````: ^29.5.0,
+- ````nodemon````: ^3.0.3,
+- ````prettier````: ^3.0.0,
+- ````source-map-support````: ^0.5.21,
+- ````supertest````: ^6.3.3,
+- ````ts-jest````: ^29.1.0,
+- ````ts-loader````: ^9.4.3,
+- ````ts-node````: ^10.9.1,
+- ````tsconfig-paths````: ^4.2.0,
+- ````typescript````: ^5.1."
 
 ### Installation
 
@@ -260,7 +261,7 @@ Change `db_name` with the desired name for the database.
 prisma migrate dev
 ```
 
-## Executando o Projeto
+### Start server
 
 Run the following command to start the server:
 
@@ -279,7 +280,7 @@ Local server running at: [http://localhost:3001](http://localhost:3000).
 
 PS: The port may be diffent if you changed the config at `.env`.
 
-### Endpoints
+## Endpoints
 
 The full doc is at [deploy-swagger](https://investment-fullstack.onrender.com/doc)(deploy)
 or [local-swagger](http://localhost:3001/doc)(running locally).
