@@ -1,17 +1,19 @@
 # Backend for a Fullstack project
+<hr style="border-top: 3px solid #bbb;">
 
 ## Description
 
 Backend of a fullstack app that connects investors and investment advisors.
 The goal of this project was to make my first fullstack app using Nest.js.
+<hr style="border-top: 3px solid #bbb;">
 
 ## Table of contents
 
 - [Overview](#overview)
     - [Built with](#build-with)
     - [Deploy links](#deploy-links)
-    - [Relationships](#relationships)
 - [Project Structure](#project-structure)
+    - [Relationships](#relationships)
     - [Architecture](#architecture)
     - [Scripts](#scripts)
     - [Dependencies](#dependencies)
@@ -23,10 +25,13 @@ The goal of this project was to make my first fullstack app using Nest.js.
 - [Endpoints](#endpoints)
 - [The process](#the-process)
     - [What I learned](#what-i-learned)
+      - [Session payload](#session-payload)
+      - [Update password](#update-password)
     - [Continued development](#continued-development)
     - [Useful resources](#useful-resources)
 - [Acknowledgments](#acknowledgments)
     - [Author](#author)
+<hr style="border-top: 3px solid #bbb;">
 
 ## Overview
 
@@ -43,11 +48,13 @@ The goal of this project was to make my first fullstack app using Nest.js.
 - [Documentation](https://investment-fullstack.onrender.com/doc)
 - [Live Backend](https://investment-fullstack.onrender.com/)
 
+
+<hr style="border-top: 3px solid #bbb;">
+
+## Project Structure
 ### Relationships
 
 ![](relationships.jpeg)
-
-## Project Structure
 
 ### Architecture
 
@@ -280,6 +287,8 @@ Local server running at: [http://localhost:3001](http://localhost:3000).
 
 PS: The port may be diffent if you changed the config at `.env`.
 
+<hr style="border-top: 3px solid #bbb;">
+
 ## Endpoints
 
 The full doc is at [deploy-swagger](https://investment-fullstack.onrender.com/doc)(deploy)
@@ -323,13 +332,16 @@ or [local-swagger](http://localhost:3001/doc)(running locally).
 | PATCH      | /admin/password                       | Validate current password and update it          | Authenticated User    |
 | DELETE     | /admin                                | Remove admin                                     | Authenticated User    |
 
+<hr style="border-top: 3px solid #bbb;">
+
 ## The process
 
 ### What I learned
 
+#### Session payload
 To enhance the logged user security I decided to retrieve only the id at the payload.
 It was the first time I tried it, so it was not straightforward.
-I came up with the following:
+Finally, it worked with the following:
 
 ```ts
 //session.service.ts
@@ -339,7 +351,7 @@ const token = { sub: id };
 return { token: await this.jwtService.signAsync(token) };
 ```
 
-So, at the controller the client passes the token to make
+At the controller the client passes the token to make
 a request. Such as:
 
 ```ts
@@ -363,9 +375,9 @@ updatePasswordDto: UpdatePasswordDto,
 }
 ```
 
-I also want to highlight the update of the password service.
-That was also the first time built:
+#### Update password
 
+I also want to highlight the update of the password service:
 ```ts
     async
 updatePassword(
@@ -407,10 +419,15 @@ but could not finish it and automatize the pagination of GET requests
 that involve retrieving multiple instances.
 Also to experiment with MongoDB.
 
+
+<hr style="border-top: 3px solid #bbb;">
+
 ### Useful resources
 
-- [How to make Nest and Swagger docs](https://www.slingacademy.com/article/how-to-automatically-generate-swagger-docs-in-nestjs/)
-- [Nest Offical doc](https://docs.nestjs.com/)
+- [How to make a Nest documentation with Swagger](https://www.slingacademy.com/article/how-to-automatically-generate-swagger-docs-in-nestjs/)
+- [Nest Official doc](https://docs.nestjs.com/)
+
+<hr style="border-top: 3px solid #bbb;">
 
 ## Acknowledgments
 
@@ -419,4 +436,6 @@ Also to experiment with MongoDB.
 - Github - [Bruno Moleta](https://github.com/brunomoleta)
 - Frontend Mentor - [@brunomoleta](https://www.frontendmentor.io/profile/brunomoleta)
 - LinkedIn - [@brunomoleta](https://www.linkedin.com/in/bruno-moleta-santos/)
-- Email - brunomoleta@pm.me 
+- Email - brunomoleta@pm.me
+
+<hr style="border-top: 3px solid #bbb;">
