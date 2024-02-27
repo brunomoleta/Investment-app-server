@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
   Param,
   Patch,
   Post,
@@ -16,11 +15,11 @@ import { InvestmentTypeService } from './investmentType.service';
 import { CreateInvestmentTypeDto, Risk } from './dto/create-investmentType.dto';
 import { UpdateInvestmentTypeDto } from './dto/update-investmentType.dto';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -42,7 +41,6 @@ export class InvestmentTypeController {
     description:
       "It's necessary to set a valid token to create an investment type.",
   })
-  @UseGuards(JwtGuard)
   create(@Body() createInvestmentTypeDto: CreateInvestmentTypeDto) {
     return this.investmentTypeService.create(createInvestmentTypeDto);
   }
@@ -59,6 +57,7 @@ export class InvestmentTypeController {
       "It's necessary to insert a admin token to list all investment types.",
   })
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   findAllAdminOnly(@Req() request: Request) {
     return this.investmentTypeService.findAllAdminOnly(request);
   }
@@ -107,6 +106,7 @@ export class InvestmentTypeController {
     description: 'This user is not allowed to perform this action.',
   })
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   update(
     @Param('id') id: string,
     @Body() updateInvestmentTypeDto: UpdateInvestmentTypeDto,
@@ -125,6 +125,7 @@ export class InvestmentTypeController {
   })
   @Delete('id/:id')
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   remove(@Param('id') id: string) {
     return this.investmentTypeService.remove(id);
   }

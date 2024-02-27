@@ -15,6 +15,7 @@ import { JwtGuard } from '../session/jwt.guard';
 import { decode } from 'jsonwebtoken';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiNoContentResponse,
@@ -51,12 +52,14 @@ export class InvestorsController {
     description: 'List investors',
   })
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   findAll() {
     return this.investorsService.findAll();
   }
 
   @Get('advisor/:advisor_id')
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({
     type: Investor,
     isArray: true,
@@ -69,6 +72,7 @@ export class InvestorsController {
     description: 'This user is not allowed to perform this action.',
   })
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   filterPerAdvisorId(@Param('advisor_id') advisor_id: string) {
     return this.investorsService.filterPerAdvisorId(advisor_id);
   }
@@ -80,6 +84,7 @@ export class InvestorsController {
     description: 'Filter investors through their investment amount.',
   })
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   filterPerAmount(@Param('advisor_id') amount: InvestmentAmount) {
     return this.investorsService.filterPerAmount(amount);
   }
@@ -94,6 +99,7 @@ export class InvestorsController {
     description: 'This user is not allowed to perform this action.',
   })
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   findById(@Request() request: any) {
     const token = request.headers.authorization.split(' ')[1];
     const decoded: any = decode(token);
@@ -114,6 +120,7 @@ export class InvestorsController {
       'Please check the allowed data that can be sent to update the investor',
   })
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   update(
     @Request() request: any,
     @Body() updateInvestorDto: UpdateInvestorDto,
@@ -137,6 +144,7 @@ export class InvestorsController {
     description: 'Conflict. Invalid password.',
   })
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   async changePassword(
     @Request() request: any,
     @Body() updatePasswordDto: UpdatePasswordDto,
@@ -158,6 +166,7 @@ export class InvestorsController {
     description: 'Not Found',
   })
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   remove(@Request() request: any) {
     const token = request.headers.authorization.split(' ')[1];
     const decoded: any = decode(token);

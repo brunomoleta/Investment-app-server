@@ -18,6 +18,7 @@ import { decode } from 'jsonwebtoken';
 import { RetrieveAdvisors } from './advisors';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiNoContentResponse,
@@ -61,6 +62,7 @@ export class AdvisorsController {
     description: 'Only admins can access this route',
   })
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   findAllAdminOnly(@Req() request: Request): Promise<RetrieveAdvisors> {
     return this.advisorsService.findAllAdminOnly(request);
   }
@@ -120,6 +122,7 @@ export class AdvisorsController {
     description: "It's necessary to set a valid token to retrieve the advisor",
   })
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   findById(@Request() request: any) {
     const token = request.headers.authorization.split(' ')[1];
     const decoded: any = decode(token);
@@ -143,6 +146,7 @@ export class AdvisorsController {
     description: 'Conflict. Invalid password.',
   })
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   async changePassword(
     @Request() request: any,
     @Body() updatePasswordDto: UpdatePasswordDto,
@@ -158,6 +162,7 @@ export class AdvisorsController {
 
   @Patch()
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({
     type: Advisor,
     description: 'Update an advisor data through the token',
@@ -175,6 +180,7 @@ export class AdvisorsController {
 
   @Delete()
   @UseGuards(JwtGuard)
+  @ApiBearerAuth()
   @ApiNoContentResponse({
     description: 'Deleted an investor through the token successfully',
   })
