@@ -1,10 +1,13 @@
 # Backend for a Fullstack project
+
 <hr style="border-top: 3px solid #bbb;">
 
 ## Description
 
 Backend of a fullstack app that connects investors and investment advisors.
 The goal of this project was to make my first fullstack app using Nest.js.
+<hr style="border-top: 3px solid #bbb;">
+
 <hr style="border-top: 3px solid #bbb;">
 
 ## Table of contents
@@ -25,12 +28,13 @@ The goal of this project was to make my first fullstack app using Nest.js.
 - [Endpoints](#endpoints)
 - [The process](#the-process)
     - [What I learned](#what-i-learned)
-      - [Session payload](#session-payload)
-      - [Update password](#update-password)
+        - [Session payload](#session-payload)
+        - [Update password](#update-password)
     - [Continued development](#continued-development)
     - [Useful resources](#useful-resources)
 - [Acknowledgments](#acknowledgments)
     - [Author](#author)
+
 <hr style="border-top: 3px solid #bbb;">
 
 ## Overview
@@ -48,10 +52,10 @@ The goal of this project was to make my first fullstack app using Nest.js.
 - [Documentation](https://investment-fullstack.onrender.com/doc)
 - [Live Backend](https://investment-fullstack.onrender.com/)
 
-
 <hr style="border-top: 3px solid #bbb;">
 
 ## Project Structure
+
 ### Relationships
 
 ![](relationships.jpeg)
@@ -59,11 +63,11 @@ The goal of this project was to make my first fullstack app using Nest.js.
 ### Architecture
 
 ```
-investing-app-client/
+investing-app-server/
 │
-├── node_modules/         Dependencies installed in your local environment.
+├── node_modules/       Dependencies installed in your local environment.
 │
-├── prisma/               Contains Prisma migrations and Prisma models
+├── prisma/             Contains Prisma migrations and Prisma models
 │
 ├── src/                Source code
 |   |
@@ -339,6 +343,7 @@ or [local-swagger](http://localhost:3001/doc)(running locally).
 ### What I learned
 
 #### Session payload
+
 To enhance the logged user security I decided to retrieve only the id at the payload.
 It was the first time I tried it, so it was not straightforward.
 Finally, it worked with the following:
@@ -378,6 +383,7 @@ updatePasswordDto: UpdatePasswordDto,
 #### Update password
 
 I also want to highlight the update of the password service:
+
 ```ts
     async
 updatePassword(

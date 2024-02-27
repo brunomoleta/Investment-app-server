@@ -34,16 +34,41 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Investing with a personal advisor app Back-end documentation')
     .setDescription(
-      'Back-end nest.js app that connects investors with investment advisors',
+      'Back-end nest.js app that connects investors with investment advisors.',
     )
+
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'bearerAuth', // this is the reference name for security
+    )
+    .setLicense(
+      'Repositório do Back-end',
+      'https://github.com/brunomoleta/Investment-app-server',
+    )
+    .setExternalDoc(
+      'Repositório do Front-end',
+      'https://github.com/brunomoleta/Investment-app-client',
+    )
+    .addServer('https://investment-fullstack.onrender.com/', 'deployed url;')
+    .addServer('http://localhost:3001/', 'local url')
+
     .setVersion('1.0.0')
-    .addTag('admin')
-    .addTag('login')
-    .addTag('advisor')
-    .addTag('investor')
-    .addTag('investment_type')
+
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
+
+  document.tags = [
+    { name: 'admin', description: 'Operations related to the super user' },
+    {
+      name: 'login',
+      description: 'Relates to user login and token activation',
+    },
+    { name: 'advisor', description: "Relates to the investment's advisor" },
+    { name: 'investor', description: "Relates to the investor's operations" },
+    { name: 'investment_type', description: 'Relates to the investment_type' },
+  ];
+
   SwaggerModule.setup('doc', app, document);
 
   const port = Number(process.env.PORT) || 3001;
