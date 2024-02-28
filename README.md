@@ -8,7 +8,6 @@ Backend of a fullstack app that connects investors and investment advisors.
 The goal of this project was to make my first fullstack app using Nest.js.
 <hr style="border-top: 3px solid #bbb;">
 
-<hr style="border-top: 3px solid #bbb;">
 
 ## Table of contents
 
@@ -21,9 +20,10 @@ The goal of this project was to make my first fullstack app using Nest.js.
     - [Scripts](#scripts)
     - [Dependencies](#dependencies)
     - [Dev dependencies](#dev-dependencies)
+- [Local settings ](#local-settings)
     - [Installation](#installation)
-        - [Local settings](#local-settings)
-        - [Database config](#database-config)
+    - [Environment variables](#environment-variables)
+    - [Database config](#database-config)
     - [Start server](#start-server)
 - [Endpoints](#endpoints)
 - [The process](#the-process)
@@ -49,8 +49,8 @@ The goal of this project was to make my first fullstack app using Nest.js.
 
 ### Deploy links
 
-- [Documentation](https://investment-fullstack.onrender.com/doc)
-- [Live Backend](https://investment-fullstack.onrender.com/)
+- Documentarion: https://investment-fullstack.onrender.com/doc
+- Live Backend: https://investment-fullstack.onrender.com
 
 <hr style="border-top: 3px solid #bbb;">
 
@@ -196,6 +196,10 @@ Run the scripts starting with `npm run` or `yarn`,
 - ````tsconfig-paths````: ^4.2.0,
 - ````typescript````: ^5.1."
 
+<hr style="border-top: 3px solid #bbb;">
+
+## Local settings
+
 ### Installation
 
 1. Clone the repositório:
@@ -210,12 +214,12 @@ git clone git@github.com:brunomoleta/Investment-app-server.git
 yarn install
 ```
 
-#### Local settings
+### Environment variables
 
 Make sure you set the environment variables in the `.env` file, using `.env.example`,
 located at the project's root.
 
-#### Database config
+### Database config
 
 1. Install PostgreSQL
 
