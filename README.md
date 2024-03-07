@@ -49,8 +49,10 @@ The goal of this project was to make my first fullstack app using Nest.js.
 
 ### Deploy links
 
-- Documentarion: https://investment-fullstack.onrender.com/doc
+- Documentation: https://investment-fullstack.onrender.com/doc
 - Live Backend: https://investment-fullstack.onrender.com
+- Front End Repo: https://github.com/brunomoleta/Investment-app-client
+- Live Application: https://easybank-investments.vercel.app/
 
 <hr style="border-top: 3px solid #bbb;">
 
