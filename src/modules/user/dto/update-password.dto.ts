@@ -2,9 +2,14 @@ import { IsNotEmpty, IsString, Matches, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { hashSync } from 'bcryptjs';
+import { Constants } from '../../../decorators/constants';
 
 export class UpdatePasswordDto {
-  @ApiProperty()
+  @ApiProperty({
+    type: String,
+    description: 'Required property',
+    example: Constants.USER_PASSWORD,
+  })
   @IsNotEmpty()
   @IsString()
   currentPassword!: string;
@@ -12,6 +17,7 @@ export class UpdatePasswordDto {
   @ApiProperty({
     type: String,
     description: 'Required property',
+    example: Constants.USER_NEWPASSWORD,
   })
   @IsString()
   @IsNotEmpty()

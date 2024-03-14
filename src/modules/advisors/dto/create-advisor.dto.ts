@@ -1,6 +1,7 @@
 import { IsEnum, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { CreateUserDto } from '../../user/dto/create-user.dto';
+import { Constants } from '../../../decorators/constants';
 
 export enum Experience {
   Beginner = 'beginner',
@@ -13,6 +14,7 @@ export class CreateAdvisorDto extends CreateUserDto {
   @ApiProperty({
     type: String,
     description: 'Required property',
+    example: 'advanced',
   })
   @IsNotEmpty()
   @IsEnum(Experience)
@@ -21,6 +23,7 @@ export class CreateAdvisorDto extends CreateUserDto {
   @ApiProperty({
     type: String,
     description: 'Readonly property',
+    example: Constants.SPECIALITY_ID,
   })
   @IsString()
   speciality_id: string;
@@ -28,6 +31,7 @@ export class CreateAdvisorDto extends CreateUserDto {
   @ApiProperty({
     type: String,
     description: 'Required property',
+    example: Constants.USER_BIO,
   })
   @IsString()
   @IsNotEmpty()
