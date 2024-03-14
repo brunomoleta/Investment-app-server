@@ -114,6 +114,12 @@ export class AdminsController {
     description: 'Get specific admin through the token.',
     type: Admin,
   })
+  @ApiNotFoundResponse({
+    description: Constants.NOTFOUND_RESPONSE,
+    schema: {
+      example: { message: Constants.NOTFOUND_RESPONSE },
+    },
+  })
   @ApiUnauthorizedResponse({
     description: 'Only admin users can retrieve an admin.',
     schema: {
@@ -151,7 +157,7 @@ export class AdminsController {
   @ApiConflictResponse({
     description: Constants.INVALIDP_RESPONSE,
     schema: {
-      example: { message: Constants.PASSWORD_OK_RESPONSE },
+      example: { message: Constants.INVALIDP_RESPONSE },
     },
   })
   @ApiResponse({
