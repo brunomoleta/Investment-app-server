@@ -10,6 +10,7 @@ import {
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { hashSync } from 'bcryptjs';
+import { Constants } from '../../../decorators/constants';
 
 export class CreateAdminDto {
   @IsString()
@@ -19,6 +20,7 @@ export class CreateAdminDto {
   @ApiProperty({
     type: String,
     description: 'Required property',
+    example: Constants.USER_NAME,
   })
   name: string;
 
@@ -30,12 +32,14 @@ export class CreateAdminDto {
   @ApiProperty({
     type: String,
     description: 'Required property',
+    example: Constants.USER_EMAIL,
   })
   email!: string;
 
   @ApiProperty({
     type: String,
     description: 'Required property',
+    example: Constants.USER_PASSWORD,
   })
   @IsString()
   @IsNotEmpty()

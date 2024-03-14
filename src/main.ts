@@ -32,7 +32,7 @@ async function bootstrap() {
   app.enableCors(corsOptions);
 
   const config = new DocumentBuilder()
-    .setTitle('Investing with a personal advisor app Back-end documentation')
+    .setTitle('Easybank Investments back end doc')
     .setDescription(
       'Back-end nest.js app that connects investors with investment advisors.',
     )
