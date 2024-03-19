@@ -24,12 +24,14 @@ import {
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UpdatePasswordDto } from '../user/dto/update-password.dto';
 import { Advisor } from './entities/advisor.entity';
 import { RetrieveAdvisorDto } from './dto/retrieve-advisor.dto';
+import { Constants } from '../../decorators/constants';
 
 @Controller('advisor')
 @ApiTags('advisor')
@@ -37,22 +39,36 @@ export class AdvisorsController {
   constructor(private readonly advisorsService: AdvisorsService) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Create advisor.',
+    description: 'User creates an advisor account.',
+  })
   @ApiCreatedResponse({
     description: 'Advisor created successfully',
     isArray: false,
     type: Advisor,
   })
-  @ApiConflictResponse({
-    description: 'Conflict. This email already exists',
-  })
   @ApiBadRequestResponse({
     description: "Bad request. There's missing data",
+    schema: {
+      example: { message: Constants.EMAIL_RESPONSE },
+    },
+  })
+  @ApiConflictResponse({
+    description: Constants.EMAIL_RESPONSE,
+    schema: {
+      example: { message: Constants.EMAIL_RESPONSE },
+    },
   })
   create(@Body() createAdvisorDto: CreateAdvisorDto) {
     return this.advisorsService.create(createAdvisorDto);
   }
 
   @Get('all')
+  @ApiOperation({
+    summary: 'List all advisors.',
+    description: 'List all advisors.',
+  })
   @ApiOkResponse({
     isArray: true,
     type: RetrieveAdvisorDto,
@@ -68,6 +84,10 @@ export class AdvisorsController {
   }
 
   @Get()
+  @ApiOperation({
+    summary: 'List all advisors with admin only access.',
+    description: 'List all advisors with all the info related to an advisor.',
+  })
   @ApiOkResponse({
     isArray: true,
     type: Advisor,
@@ -78,14 +98,21 @@ export class AdvisorsController {
   }
 
   @Get('speciality_id/:speciality_id')
+  @ApiOperation({
+    summary: 'Filter advisors through their speciality.',
+    description: 'Filter advisors through their speciality.',
+  })
+  @ApiNotFoundResponse({
+    description: 'Please set a valid speciality_id',
+    schema: {
+      example: { message: Constants.NOTFOUND_RESPONSE },
+    },
+  })
   @ApiOkResponse({
     isArray: true,
     type: Advisor,
     description:
       'Get advisors filtered by their speciality, without authentication',
-  })
-  @ApiNotFoundResponse({
-    description: 'Please set a valid speciality_id',
   })
   filterPerSpecialityId(
     @Req() request: Request,
@@ -95,15 +122,22 @@ export class AdvisorsController {
   }
 
   @Get('experience/:experience')
+  @ApiOperation({
+    summary: 'Filter advisors through their experience.',
+    description: 'Filter advisors through their experience.',
+  })
+  @ApiNotFoundResponse({
+    description:
+      'Please set a valid experience. Either beginner, intermediate, advanced, expert',
+    schema: {
+      example: { message: Constants.NOTFOUND_RESPONSE },
+    },
+  })
   @ApiOkResponse({
     isArray: true,
     type: Advisor,
     description:
       'Get advisors filtered by their experience level, without authentication',
-  })
-  @ApiNotFoundResponse({
-    description:
-      'Please set a valid experience. Either beginner, intermediate, advanced, expert',
   })
   filterPerExperience(
     @Req() request: Request,
@@ -113,6 +147,10 @@ export class AdvisorsController {
   }
 
   @Get('id')
+  @ApiOperation({
+    summary: 'Retrieve advisor through their token.',
+    description: 'Retrieve advisor through their token.',
+  })
   @ApiOkResponse({
     type: RetrieveAdvisorDto,
     isArray: false,
@@ -131,8 +169,13 @@ export class AdvisorsController {
   }
 
   @Patch('password')
+  @ApiOperation({
+    summary: "Update advisor's password.",
+    description:
+      "Update advisor's password after validating his current one through the token",
+  })
   @ApiOkResponse({
-    description: "Update investor's password after validating his current one.",
+    description: "Update advisor's password after validating his current one.",
   })
   @ApiBadRequestResponse({
     description:
@@ -161,6 +204,10 @@ export class AdvisorsController {
   }
 
   @Patch()
+  @ApiOperation({
+    summary: "Update advisor's info.",
+    description: "Update advisor's personal data through the token",
+  })
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
@@ -179,6 +226,10 @@ export class AdvisorsController {
   }
 
   @Delete()
+  @ApiOperation({
+    summary: 'Delete an advisor.',
+    description: 'Delete an advisor through their token',
+  })
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
   @ApiNoContentResponse({
@@ -186,6 +237,9 @@ export class AdvisorsController {
   })
   @ApiNotFoundResponse({
     description: 'Not Found',
+    schema: {
+      example: { message: Constants.NOTFOUND_RESPONSE },
+    },
   })
   @ApiUnauthorizedResponse({
     description:

@@ -10,6 +10,7 @@ export class Investor extends User {
       "'well-rounded',\n" +
       "'multimillionaire',\n" +
       "or 'wealthy'",
+    example: 'wealthy',
   })
   amount!: InvestmentAmount;
 
@@ -17,6 +18,7 @@ export class Investor extends User {
     type: String,
     description:
       'Required property. It has to be one of the existing advisor_id.',
+    example: '8be7f2cd-2365-4c79-a204-ae1eb4825c1f',
   })
   advisor_id!: string;
 

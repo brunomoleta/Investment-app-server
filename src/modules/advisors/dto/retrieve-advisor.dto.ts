@@ -8,6 +8,7 @@ export class RetrieveAdvisorDto extends CreateAdvisorDto {
     type: InvestmentType,
     isArray: false,
     description: 'It will come from the investment_type relationship',
+    example: 'crypto',
   })
   speciality: string;
 
