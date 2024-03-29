@@ -51,7 +51,7 @@ export class AdvisorsController {
   @ApiBadRequestResponse({
     description: "Bad request. There's missing data",
     schema: {
-      example: { message: Constants.EMAIL_RESPONSE },
+      example: { message: Constants.MISSING_DATA },
     },
   })
   @ApiConflictResponse({
@@ -79,6 +79,7 @@ export class AdvisorsController {
   }
 
   @Get()
+  @ApiBearerAuth()
   @ApiHeader({
     name: 'token',
     description: 'Admin Auth token',
@@ -92,7 +93,13 @@ export class AdvisorsController {
   @ApiOkResponse({
     isArray: true,
     type: Advisor,
-    description: 'Get advisors without authentication',
+    description: 'Get advisors with admin authentication.',
+  })
+  @ApiUnauthorizedResponse({
+    description: "It's necessary to set a valid token to list the advisors",
+    schema: {
+      example: { message: Constants.UNAUTHORIZED_RESPONSE },
+    },
   })
   findAllNoAuth(@Req() request: Request): Promise<RetrieveAdvisors> {
     return this.advisorsService.findAllNoAuth(request);
@@ -185,6 +192,12 @@ export class AdvisorsController {
   }
 
   @Patch('password')
+  @ApiHeader({
+    name: 'token',
+    description: 'Auth token',
+    required: true,
+    schema: { type: 'string' },
+  })
   @ApiOperation({
     summary: "Update advisor's password.",
     description:
@@ -232,7 +245,7 @@ export class AdvisorsController {
   @ApiOperation({
     summary: "Update advisor's info.",
     description:
-      "Update advisor's personal data through the token puttinh " +
+      "Update advisor's personal data through the token putting " +
       'partial information.',
   })
   @ApiHeader({
@@ -254,11 +267,9 @@ export class AdvisorsController {
       example: { message: Constants.UNAUTHORIZED_RESPONSE },
     },
   })
-  @ApiConflictResponse({
-    description: 'Current password incorrect.',
-    schema: {
-      example: { message: 'a' },
-    },
+  @ApiBadRequestResponse({
+    description:
+      'Please check the allowed data that can be sent to update the advisor',
   })
   update(@Request() request: any, @Body() updateAdvisorDto: UpdateAdvisorDto) {
     const token = request.headers.authorization.split(' ')[1];
