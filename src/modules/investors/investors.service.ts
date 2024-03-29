@@ -11,6 +11,7 @@ import { Investor } from './entities/investor.entity';
 import { UpdateInvestorDto } from './dto/update-investor.dto';
 import * as bcrypt from 'bcryptjs';
 import { UpdatePasswordDto } from '../user/dto/update-password.dto';
+import { Constants } from '../../decorators/constants';
 
 @Injectable()
 export class InvestorsService {
@@ -149,7 +150,7 @@ export class InvestorsService {
     );
 
     if (!passwordMatch) {
-      throw new ConflictException('Invalid password.');
+      throw new ConflictException(Constants.INVALIDP_RESPONSE);
     }
 
     const hashedPassword = await bcrypt.hash(updatePasswordDto.newPassword, 10);
@@ -159,7 +160,7 @@ export class InvestorsService {
       data: { password: hashedPassword },
     });
 
-    return { message: 'Password successfully updated' };
+    return { message: Constants.PASSWORD_OK_UPDATE };
   }
 
   async update(id: string, updateInvestorDto: UpdateInvestorDto) {

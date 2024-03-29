@@ -12,6 +12,7 @@ import { UpdateAdvisorDto } from './dto/update-advisor.dto';
 import { RetrieveAdvisors } from './advisors';
 import * as bcrypt from 'bcryptjs';
 import { UpdatePasswordDto } from '../user/dto/update-password.dto';
+import { Constants } from '../../decorators/constants';
 
 @Injectable()
 export class AdvisorsService {
@@ -243,7 +244,7 @@ export class AdvisorsService {
     );
 
     if (!passwordMatch) {
-      throw new ConflictException('Invalid password.');
+      throw new ConflictException(Constants.INVALIDP_RESPONSE);
     }
 
     const hashedPassword = await bcrypt.hash(updatePasswordDto.newPassword, 10);
@@ -253,7 +254,7 @@ export class AdvisorsService {
       data: { password: hashedPassword },
     });
 
-    return { message: 'Password successfully updated' };
+    return { message: Constants.PASSWORD_OK_UPDATE };
   }
 
   async update(id: string, updateAdvisorDto: UpdateAdvisorDto) {

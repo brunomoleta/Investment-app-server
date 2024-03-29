@@ -42,12 +42,12 @@ async function bootstrap() {
       'bearerAuth', // this is the reference name for security
     )
     .setLicense(
-      'Repositório do Back-end',
+      'Back end repository',
       'https://github.com/brunomoleta/Investment-app-server',
     )
     .setExternalDoc(
-      'Repositório do Front-end',
-      'https://github.com/brunomoleta/Investment-app-client',
+      'Full project explanation',
+      'https://www.brunomoleta.com.br/easy-bank-investments',
     )
     .addServer('https://investment-fullstack.onrender.com/', 'deployed url;')
     .addServer('http://localhost:3001/', 'local url')

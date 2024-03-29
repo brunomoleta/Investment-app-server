@@ -21,7 +21,7 @@ import {
   ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
-  ApiNoContentResponse,
+  ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -72,18 +72,19 @@ export class AdvisorsController {
   @ApiOkResponse({
     isArray: true,
     type: RetrieveAdvisorDto,
-    description: 'Admins get advisors with all the info.',
+    description: 'Get advisors with all safe info.',
   })
-  @ApiUnauthorizedResponse({
-    description: 'Only admins can access this route',
-  })
-  @UseGuards(JwtGuard)
-  @ApiBearerAuth()
   findAllAdminOnly(@Req() request: Request): Promise<RetrieveAdvisors> {
     return this.advisorsService.findAllAdminOnly(request);
   }
 
   @Get()
+  @ApiHeader({
+    name: 'token',
+    description: 'Admin Auth token',
+    required: true,
+    schema: { type: 'string' },
+  })
   @ApiOperation({
     summary: 'List all advisors with admin only access.',
     description: 'List all advisors with all the info related to an advisor.',
@@ -147,6 +148,12 @@ export class AdvisorsController {
   }
 
   @Get('id')
+  @ApiHeader({
+    name: 'token',
+    description: 'Auth token',
+    required: true,
+    schema: { type: 'string' },
+  })
   @ApiOperation({
     summary: 'Retrieve advisor through their token.',
     description: 'Retrieve advisor through their token.',
@@ -156,8 +163,17 @@ export class AdvisorsController {
     isArray: false,
     description: 'Retrieve an advisor through the token',
   })
+  @ApiNotFoundResponse({
+    description: 'Not Found',
+    schema: {
+      example: { message: Constants.NOTFOUND_RESPONSE },
+    },
+  })
   @ApiUnauthorizedResponse({
     description: "It's necessary to set a valid token to retrieve the advisor",
+    schema: {
+      example: { message: Constants.UNAUTHORIZED_RESPONSE },
+    },
   })
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
@@ -176,6 +192,9 @@ export class AdvisorsController {
   })
   @ApiOkResponse({
     description: "Update advisor's password after validating his current one.",
+    schema: {
+      example: { message: Constants.PASSWORD_OK_UPDATE },
+    },
   })
   @ApiBadRequestResponse({
     description:
@@ -184,9 +203,15 @@ export class AdvisorsController {
   @ApiUnauthorizedResponse({
     description:
       "It's necessary to set a valid token to update the advisor's password.",
+    schema: {
+      example: { message: Constants.UNAUTHORIZED_RESPONSE },
+    },
   })
   @ApiConflictResponse({
     description: 'Conflict. Invalid password.',
+    schema: {
+      example: { message: Constants.INVALIDP_RESPONSE },
+    },
   })
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
@@ -206,7 +231,15 @@ export class AdvisorsController {
   @Patch()
   @ApiOperation({
     summary: "Update advisor's info.",
-    description: "Update advisor's personal data through the token",
+    description:
+      "Update advisor's personal data through the token puttinh " +
+      'partial information.',
+  })
+  @ApiHeader({
+    name: 'token',
+    description: 'Auth token',
+    required: true,
+    schema: { type: 'string' },
   })
   @UseGuards(JwtGuard)
   @ApiBearerAuth()
@@ -217,6 +250,15 @@ export class AdvisorsController {
   @ApiUnauthorizedResponse({
     description:
       "It's necessary to set a valid token to update the advisor's password.",
+    schema: {
+      example: { message: Constants.UNAUTHORIZED_RESPONSE },
+    },
+  })
+  @ApiConflictResponse({
+    description: 'Current password incorrect.',
+    schema: {
+      example: { message: 'a' },
+    },
   })
   update(@Request() request: any, @Body() updateAdvisorDto: UpdateAdvisorDto) {
     const token = request.headers.authorization.split(' ')[1];
@@ -226,14 +268,20 @@ export class AdvisorsController {
   }
 
   @Delete()
+  @ApiHeader({
+    name: 'token',
+    description: 'Auth token',
+    required: true,
+    schema: { type: 'string' },
+  })
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Delete an advisor.',
     description: 'Delete an advisor through their token',
   })
   @UseGuards(JwtGuard)
-  @ApiBearerAuth()
-  @ApiNoContentResponse({
-    description: 'Deleted an investor through the token successfully',
+  @ApiOkResponse({
+    description: 'Deleted advisor through the token successfully',
   })
   @ApiNotFoundResponse({
     description: 'Not Found',
@@ -242,8 +290,10 @@ export class AdvisorsController {
     },
   })
   @ApiUnauthorizedResponse({
-    description:
-      "It's necessary to set a valid token to update the advisor's password.",
+    description: "It's necessary to set a valid token to remove the advisor.",
+    schema: {
+      example: { message: Constants.UNAUTHORIZED_RESPONSE },
+    },
   })
   remove(@Request() request: any) {
     const token = request.headers.authorization.split(' ')[1];

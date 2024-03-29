@@ -49,6 +49,7 @@ The goal of this project was to make my first fullstack app using Nest.js.
 
 ### Deploy links
 
+- Explanação em Português: https://www.brunomoleta.com.br/easy-bank-investments
 - Documentation: https://investment-fullstack.onrender.com/doc
 - Live Backend: https://investment-fullstack.onrender.com
 - Front End Repo: https://github.com/brunomoleta/Investment-app-client
@@ -393,12 +394,8 @@ I also want to highlight the update of the password service:
 ```ts
     async
 updatePassword(
-  id
-:
-string, passwordDto
-:
-UpdatePasswordDto
-)
+  id: string, passwordDto: UpdatePasswordDto
+  )
 {
   const advisor =
     await this.prisma.advisor.findUnique({
