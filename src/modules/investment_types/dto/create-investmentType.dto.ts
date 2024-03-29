@@ -6,6 +6,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { Constants } from '../../../decorators/constants';
 
 export enum Risk {
   Low = 'low',
@@ -18,6 +19,7 @@ export class CreateInvestmentTypeDto {
   @ApiProperty({
     type: String,
     description: 'Required property',
+    example: Constants.INVESTMENT_NAME,
   })
   @IsString()
   @IsNotEmpty()
@@ -27,11 +29,8 @@ export class CreateInvestmentTypeDto {
 
   @ApiProperty({
     type: String,
-    description:
-      "Required property. It can be either: 'low',\n" +
-      ",'moderate',\n" +
-      ",'high',\n" +
-      "or 'very_high'.",
+    description: Constants.INVESTMENT_ERROR,
+    example: Constants.INVESTMENT_RISK,
   })
   @IsNotEmpty()
   @IsEnum(Risk)

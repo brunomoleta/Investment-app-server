@@ -13,10 +13,11 @@ export class Constants {
   public static readonly SPECIALITY_ID: string =
     '141d1fbc-abbf-4ee0-9cf8-396bed2ea6f9';
   public static readonly EMAIL_RESPONSE: string = 'This email already exists.';
+  public static readonly MISSING_DATA: string =
+    'You must put a valid user name';
   public static readonly UNAUTHORIZED_RESPONSE: string =
     'Unauthorized request.';
   public static readonly INVALIDP_RESPONSE: string = 'Invalid password.';
-
   public static readonly TOTALINVALID_RESPONSE: string =
     'Invalid email or password.';
   public static readonly NOTFOUND_RESPONSE: string = 'Not Found.';
@@ -24,4 +25,13 @@ export class Constants {
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZmUzNzZlZS0wZGU0LTQ2OGYtYjYzNy0xNGQ4MzNkMDAyNTciLCJpYXQiOjE3MDg0MzkyMzQsImV4cCI6MTcyNTcxOTIzNH0.lENrzWjOin2xUC4HzNJ7ovXanWoIhl9eUEfRoos_Wtc';
   public static readonly PASSWORD_OK_UPDATE: string =
     'Password successfully updated';
+  public static readonly INVESTMENT_ID: string =
+    'ea6db97b-855d-4683-a167-df7120abfa67';
+  public static readonly INVESTMENT_NAME: string = 'Crypto';
+  public static readonly INVESTMENT_RISK: string = 'high';
+  public static readonly INVESTMENT_ERROR: string =
+    "Investment type can be either: 'low',\n" +
+    ",'moderate',\n" +
+    ",'high',\n" +
+    "or 'very_high'.";
 }
