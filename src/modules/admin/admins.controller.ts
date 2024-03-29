@@ -163,7 +163,7 @@ export class AdminsController {
   @ApiResponse({
     status: 200,
     schema: {
-      example: { message: Constants.PASSWORD_OK_RESPONSE },
+      example: { message: Constants.PASSWORD_OK_UPDATE },
     },
     description: "Update admin's password after validating his current one.",
   })

@@ -16,11 +16,12 @@ export class Constants {
   public static readonly UNAUTHORIZED_RESPONSE: string =
     'Unauthorized request.';
   public static readonly INVALIDP_RESPONSE: string = 'Invalid password.';
+
   public static readonly TOTALINVALID_RESPONSE: string =
     'Invalid email or password.';
   public static readonly NOTFOUND_RESPONSE: string = 'Not Found.';
   public static readonly TOKEN_RESPONSE: string =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZmUzNzZlZS0wZGU0LTQ2OGYtYjYzNy0xNGQ4MzNkMDAyNTciLCJpYXQiOjE3MDg0MzkyMzQsImV4cCI6MTcyNTcxOTIzNH0.lENrzWjOin2xUC4HzNJ7ovXanWoIhl9eUEfRoos_Wtc';
-  public static readonly PASSWORD_OK_RESPONSE: string =
+  public static readonly PASSWORD_OK_UPDATE: string =
     'Password successfully updated';
 }

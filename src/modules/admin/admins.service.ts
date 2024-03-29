@@ -10,6 +10,7 @@ import { PrismaService } from '../../database/prisma.service';
 import { plainToInstance } from 'class-transformer';
 import { UpdatePasswordDto } from '../user/dto/update-password.dto';
 import * as bcrypt from 'bcryptjs';
+import { Constants } from '../../decorators/constants';
 
 @Injectable()
 export class AdminsService {
@@ -76,7 +77,7 @@ export class AdminsService {
     );
 
     if (!passwordMatch) {
-      throw new ConflictException('Invalid password.');
+      throw new ConflictException(Constants.INVALIDP_RESPONSE);
     }
 
     const hashedPassword = await bcrypt.hash(updatePasswordDto.newPassword, 10);
@@ -86,7 +87,7 @@ export class AdminsService {
       data: { password: hashedPassword },
     });
 
-    return { message: 'Password successfully updated' };
+    return { message: Constants.PASSWORD_OK_UPDATE };
   }
 
   async remove(id: string): Promise<void> {
