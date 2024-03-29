@@ -51,6 +51,7 @@ The goal of this project was to make my first fullstack app using Nest.js.
 
 - [Documentation](https://investment-fullstack.onrender.com/doc)
 - [Live Backend](https://investment-fullstack.onrender.com/)
+- [Explanation in Portuguese] (https://www.brunomoleta.com.br/easy-bank-investments)
 
 <hr style="border-top: 3px solid #bbb;">
 
@@ -387,12 +388,8 @@ I also want to highlight the update of the password service:
 ```ts
     async
 updatePassword(
-  id
-:
-string, passwordDto
-:
-UpdatePasswordDto
-)
+  id: string, passwordDto: UpdatePasswordDto
+  )
 {
   const advisor =
     await this.prisma.advisor.findUnique({
