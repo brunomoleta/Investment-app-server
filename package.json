@@ -9,7 +9,7 @@
     "build": "nest build -- -b swc",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "postinstall": "prisma migrate deploy && yarn build",
+    "postinstall": "prisma migrate deploy && pnpm build",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/cli": "^10.0.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/jwt": "^10.2.0",
@@ -43,10 +44,10 @@
     "prisma": "^5.9.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "swagger-ui-express": "^5.0.0",
-    "@nestjs/cli": "^10.0.0"
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
+    "@nestjs/mapped-types": "^2.0.5",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
     "@swc/cli": "^0.1.65",

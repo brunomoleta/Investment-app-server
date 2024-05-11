@@ -1,31 +1,49 @@
-# base Node.js LTS image
-FROM node:lts-alpine
+FROM node:20-alpine3.18 as builder
 
-# define environment variables
-ENV HOME=/home/node/app
-ENV NODE_ENV=production
-ENV NODE_PORT=3000
+WORKDIR /app
 
-# create application folder and assign rights to the node user
-RUN mkdir -p $HOME && chown -R node:node $HOME
+COPY package*.json ./
+COPY prisma ./prisma
 
-# set the working directory
-WORKDIR $HOME
+ARG DATABASE_URL
+ARG JWT_SECRET_KEY
+ARG JWT_EXPIRES_IN
+ARG PORT
+ENV DATABASE_URL=$DATABASE_URL
+ENV JWT_SECRET_KEY=$JWT_SECRET_KEY
+ENV JWT_EXPIRES_IN=$JWT_EXPIRES_IN
+ENV PORT=$PORT
 
-# set the active user
-USER node
+COPY tsconfig.json ./
 
-# copy package.json from the host
-COPY --chown=node:node package.json $HOME/
+RUN npm install -g pnpm
+RUN pnpm install
 
-# install application modules
-RUN npm install && npm cache clean --force
+COPY . .
 
-# copy remaining files
-COPY --chown=node:node investing-server .
+RUN pnpm build
 
-# expose port on the host
-EXPOSE $NODE_PORT
+FROM node:20-alpine3.18 as runner
 
-# application launch command
-CMD [ "node", "./src/main.ts" ]
+WORKDIR /app
+
+ARG DATABASE_URL
+ARG JWT_SECRET_KEY
+ARG JWT_EXPIRES_IN
+ARG PORT
+ENV DATABASE_URL=$DATABASE_URL
+ENV JWT_SECRET_KEY=$JWT_SECRET_KEY
+ENV JWT_EXPIRES_IN=$JWT_EXPIRES_IN
+ENV PORT=$PORT
+
+
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+
+RUN npm install -g pnpm
+RUN pnpm install --production
+
+CMD ["node", "dist/main"]
